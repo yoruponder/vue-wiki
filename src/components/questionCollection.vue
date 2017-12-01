@@ -26,7 +26,7 @@
     .que-link {
       padding: 10px 0;
       min-height: 150px;
-      a {
+      a,.nodata {
         display: inline-block;
         margin: 0 5px 10px;
         width: 100px;
@@ -34,9 +34,9 @@
           vertical-align: top;
           line-height: 20px;
         }
-      }
-      span {
-        display: inline-block;
+        span {
+          display: inline-block;
+        }
       }
       .ellipsis {
         max-width: 78px;
@@ -54,13 +54,14 @@
   <ul v-if="data.length" class="que-coll-box">
     <li v-for="(v,k) in data" :key="'qtype' + k">
       <h3>
-        <a href="javascript:;">{{v.self.category_name}}<i class="fa fa-arrow-circle-right"></i></a>
+        <router-link :to="`/collection/${v.self.navigation_id}/${v.self.id}`">{{v.self.category_name}}<i class="fa fa-arrow-circle-right"></i></router-link>
       </h3>
       <div class="que-link">
-        <a v-if="v.child == null" href="javascript:;">暫無數據</a>
-        <a v-else v-for="(t,it) in v.child" :key="'qchild' + it" href="javascritp:;">
-          <span class="ellipsis">{{t.category_name}}</span><span>({{t.two}})</span>
-        </a>
+        <span class="nodata" v-if="v.child == null">暫無數據</span>
+        <router-link v-else v-for="(t,it) in v.child" :key="'qchild' + it" :to="`/collection/${v.self.navigation_id}/${v.self.id}/${t.id}`">
+          <span class="ellipsis">{{t.category_name}}</span>
+          <span>({{t.two}})</span>
+        </router-link>
       </div>
     </li>
   </ul>

@@ -1,6 +1,6 @@
 <template>
   <div class="idx-page">
-    <wiki-head :id="navigation_id" :route="route" />
+    <wiki-head :id="navigation_id" />
     <top-info :info="info" />
     <div class="com-width clearfix">
       <div class="index-left">
@@ -41,8 +41,7 @@ export default {
       },
       hot_issue: [],
       category: [],
-      navigation_id: this.nid,
-      route: this.$route
+      navigation_id: this.nid
     };
   },
   methods: {
