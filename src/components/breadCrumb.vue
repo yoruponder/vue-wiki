@@ -42,7 +42,7 @@ export default {
     };
   },
   beforeMount: function() {
-    console.log(this.$route)
+    //console.log(this.$route)
   }
 };
 </script>

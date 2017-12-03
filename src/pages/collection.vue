@@ -8,7 +8,7 @@
     <bread-crumb :data="bread"/>
     <div class="com-width clearfix">
       <div class="index-left">
-        
+        <collection-block/>
       </div>
       <right-block :id="navigation_id" />
     </div>
@@ -19,6 +19,7 @@
 <script>
 import wikiHead from "_COMP_/header";
 import breadCrumb from "_COMP_/breadCrumb";
+import collectionBlock from "_COMP_/collectionBlock";
 import rightBlock from "_COMP_/rightBlock";
 import wikiFooter from "_COMP_/footer";
 
@@ -28,11 +29,12 @@ export default {
     wikiHead,
     rightBlock,
     wikiFooter,
-    breadCrumb
+    breadCrumb,
+    collectionBlock
   },
   data() {
     return {
-      navigation_id: this.$route.params.id,
+      navigation_id: this.$route.params.nid,
     };
   },
   computed: {

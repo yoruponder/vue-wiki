@@ -20,7 +20,7 @@ export default new Router({
       props: {nid: 2}
     },
     {
-      path: '/collection/:id/:c1id?/:c2id?',
+      path: '/collection/:nid/:cat1?/:cat2?',
       component: () => ({
         component: import ( /* webpackChunkName: "index" */ '_PAGE_/collection'),
       })
