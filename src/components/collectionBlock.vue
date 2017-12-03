@@ -12,7 +12,7 @@
   .fa {
     margin-right: 10px;
   }
-  .type-col-box {
+  .type-col-box { 
     margin-top: 30px;
     li {
       display: inline-block;
