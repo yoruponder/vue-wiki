@@ -7,6 +7,7 @@ export default new Router({
   mode: 'history',
   routes: [{
       path: '/',
+      name: '8591',
       component: () => ({
         component: import ( /* webpackChunkName: "index" */ '_PAGE_/index'),
       }),
@@ -14,6 +15,7 @@ export default new Router({
     },
     {
       path: '/100',
+      name: '100',
       component: () => ({
         component: import ( /* webpackChunkName: "index" */ '_PAGE_/index'),
       }),
@@ -21,10 +23,23 @@ export default new Router({
     },
     {
       path: '/collection/:nid/:cat1?/:cat2?',
+      name: 'collection',
       component: () => ({
-        component: import ( /* webpackChunkName: "index" */ '_PAGE_/collection'),
+        component: import ( /* webpackChunkName: "collection" */ '_PAGE_/collection'),
+
       })
     },
+    {
+      path: '/questionDetail/:qid',
+      name: 'questionDetail',
+      component: () => ({
+        component: import ( /* webpackChunkName: "questionDetail" */ '_PAGE_/questionDetail'),
+
+
+
+      })
+    },
+
 
   ]
 })

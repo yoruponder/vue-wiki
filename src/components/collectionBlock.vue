@@ -6,21 +6,21 @@
   padding: 20px;
   overflow: hidden;
   margin-bottom: 40px;
-  h3{
+  h3 {
     line-height: 24px;
   }
   .fa {
     margin-right: 10px;
   }
-  .type-col-box { 
+  .type-col-box {
     margin-top: 30px;
     li {
       display: inline-block;
       width: 150px;
       margin: 0 26px 20px 0;
       color: $fc3;
-      a.active{
-        color:$orange;
+      a.active {
+        color: $orange;
       }
       span {
         margin-left: 5px;
@@ -29,27 +29,76 @@
   }
 }
 .questionList {
-    .que-nav {
-        font-size: $mfs;
-        color: $fc2;
-        border-bottom: $comborder;
-        a,
-        span {
-            display: inline-block;
-            height: $comlh;
-            line-height: $comlh;
-            margin-right: 40px;
-            cursor: pointer;
-            padding: 0 20px;
-        }
-        .now,
-        span:hover {
-            color: $baseColor;
-            border-bottom: 2px solid $baseColor;
-        }
+  .que-nav {
+    font-size: $mfs;
+    color: $fc2;
+    border-bottom: $comborder;
+    a,
+    span {
+      display: inline-block;
+      height: $comlh;
+      line-height: $comlh;
+      margin-right: 40px;
+      cursor: pointer;
+      padding: 0 20px;
     }
-    .wiki-pagination {
-        margin-top: 30px;
+    .now,
+    span:hover {
+      color: $baseColor;
+      border-bottom: 2px solid $baseColor;
+    }
+  }
+  .wiki-pagination {
+    margin-top: 30px;
+  }
+}
+.que-list-table {
+    .q-l-tle {
+        width: 73%;
+    }
+    .q-l-view {
+        width: 7%;
+        text-align: center;
+    }
+    .q-l-time {
+        width: 20%;
+        text-align: right;
+    }
+    th.q-l-time {
+        text-align: center;
+    }
+    table {
+        font-size: $nfs;
+        text-align: left;
+        width: 100%;
+        margin: 20px 0;
+        tr {
+            border-bottom: $comborder;
+        }
+        tr:nth-child(odd) {
+            background: $lgray;
+        }
+        tr:hover {
+            background: $lgray;
+        }
+        tr:first-child,
+        tr:first-child:hover {
+            background: #fff;
+        }
+        th,
+        td {
+            line-height: 40px;
+            font-size: $mfs;
+            color: $fc2;
+        }
+        td {
+            font-size: $nfs;
+            color: $fc3;
+            a span {
+                color: $fc3;
+                margin-left: 5px;
+            }
+        }
     }
 }
 </style>
@@ -63,7 +112,7 @@
           <a href="javascript:;">無數據</a>
         </li>
         <li v-else v-for="(v,k) in subCat" :key="k">
-          <router-link :to="'/collection/' + nid + (cat1 ? '/' + cat1 : '') + '/'+v.id">{{v.category_name}}</router-link>
+          <router-link :to="'/collection/' + nid + (cat1 ? '/' + cat1 : '') + '/'+v.id" :class="[v.id == cat2 ? 'active' : '']">{{v.category_name}}</router-link>
           <span>({{cat1 ? v.two : v.one}})</span>
         </li>
       </ul>
@@ -74,9 +123,9 @@
         <span v-if="type == 'tag'">标签筛选结果</span>
         <span v-if="key">搜索结果</span>
         <router-link :to="{query:{type:'all'}}" :class="allQuestionCls">全部問題</router-link>
-        <router-link :to="{query:{type:'hot'}}" active-class="now">熱點問題</router-link>
-        <router-link :to="{query:{type:'my'}}" active-class="now">我的最愛</router-link>
-        <router-link :to="{query:{type:'wait'}}" active-class="now">待回答</router-link>
+        <router-link :to="{query:{type:'hot'}}" active-class="now" exact>熱點問題</router-link>
+        <router-link :to="{query:{type:'my'}}" active-class="now" exact>我的最愛</router-link>
+        <router-link :to="{query:{type:'wait'}}" active-class="now" exact>待回答</router-link>
       </div>
       <div class="que-list-table">
         <table>
@@ -85,53 +134,70 @@
             <th class="q-l-view">瀏覽</th>
             <th class="q-l-time">時間</th>
           </tr>
-          {list}
+          <tr v-if="!issue || issue.length == 0">
+            <td colspan="3" :style="{textAlign:'center'}">暂无数据</td>
+          </tr>
+          <tr v-else v-for="(v,k) in issue" :key="k">
+            <td class="q-l-tle">
+              <router-link :to="`/questionDetail/${v.id}`">
+                {{v.issue_title}}
+                <span>{{v.tag_info ? `[${v.tag_info.content}]` : ''}}</span>
+              </router-link>
+            </td>
+            <td class="q-l-view">{{v.browse_num}}</td>
+            <td class="q-l-time">{{v.issue_time}}</td>
+          </tr>
         </table>
-        <pagination :total="30" :current="currentPage" @changePage="pageChange"/>
+        <pagination :total="pageNum" :current="currentPage" @changePage="pageChange"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import pagination from '_COMP_/pagination';
+import pagination from "_COMP_/pagination";
 
 export default {
-  name: 'collectionBlock',
+  name: "collectionBlock",
   props: [],
-  components:{pagination},
+  components: { pagination },
   data() {
     return {
       category: [],
-      bigName: '全部分類',
+      bigName: "全部分類",
       nid: this.$route.params.nid ? this.$route.params.nid : 1,
-      cat1: this.$route.params.cat1 ? this.$route.params.cat1 : '',
-      cat2: this.$route.params.cat2 ? this.$route.params.cat2 : '',
+      cat1: this.$route.params.cat1 ? this.$route.params.cat1 : "",
+      cat2: this.$route.params.cat2 ? this.$route.params.cat2 : "",
       currentPage: this.$route.query.page ? this.$route.query.page : 1,
-      type: this.$route.query.type ? this.$route.query.type : 'all',
-      key: this.$route.query.key ? this.$route.query.key : '',
+      type: this.$route.query.type ? this.$route.query.type : "all",
+      key: this.$route.query.key ? this.$route.query.key : "",
+      tagid: this.$route.query.tagid ? this.$route.query.tagid : "",
+      count: 0, //条数,
+      pageSize: 15,
+      issue: []
     };
   },
   computed: {
-    allQuestionCls: function () {
-      return this.type == 'all' ? 'now' : '';
+    allQuestionCls: function() {
+      return this.type == "all" ? "now" : "";
     },
-    subCat: function () {
-      let catArray  = [];
-      let catData   = this.category;
-      if(this.cat1){
-        for(let i in catData){
-          if(this.cat1 == catData[i].self.id){
+    pageNum: function () {
+      return Math.ceil(this.count / this.pageSize);
+    },
+    subCat: function() {
+      let catArray = [];
+      let catData = this.category;
+      if (this.cat1) { //有一級分類
+        for (let i in catData) {
+          if (this.cat1 == catData[i].self.id) {
             this.bigName = catData[i].self.category_name;
-
             catArray = catData[i].child;
             break;
           }
         }
-      }else if(this.nid){
-        this.bigName = '全部分類';
-
-        for(let i in catData){
+      } else if (this.nid) {
+        this.bigName = "全部分類";
+        for (let i in catData) {
           catArray.push(catData[i].self);
         }
       }
@@ -140,31 +206,57 @@ export default {
   },
   methods: {
     getCategory() {
-      ajax.post(Api,{c: "index", a: "index", navigation_id: this.nid}).then(res => {
+      ajax.post(Api, { c: "index", a: "index", navigation_id: this.nid }).then(res => {
         this.category = res.data.category;
       });
     },
     catChange() {
-      this.cat1 = this.$route.params.cat1 ? this.$route.params.cat1 : '';
-      this.cat2 = this.$route.params.cat2 ? this.$route.params.cat2 : '';
+      this.cat1 = this.$route.params.cat1 ? this.$route.params.cat1 : "";
+      this.cat2 = this.$route.params.cat2 ? this.$route.params.cat2 : "";
     },
     typeChange() {
-
+      this.type = this.$route.query.type ? this.$route.query.type : "all";
     },
     pageChange(now) {
-      console.log(now)
+      console.log(now);
     },
-    getQuestion() {
+    keyChange() {
 
     },
+    tagIdChange() {
+
+    },
+    getQuestion() {
+      let data = {
+        c: 'index',
+        a: 'issue',
+        type: this.type,
+        page: this.currentPage,
+        pagesize: this.pageSize,
+        category_one: this.cat1,
+        category_two: this.cat2,
+        navigation_id: this.nid,
+        key: this.key,
+        tag: this.tagid
+      };
+
+      ajax.post(Api,data).then(res => {
+        this.issue = res.data.issue;
+        this.count = res.data.count;
+      });
+    }
   },
-  beforeMount: function () {
+  beforeMount: function() {
     this.getCategory();
+    this.getQuestion();
   },
   watch: {
     $route: function() {
       this.catChange();
+      this.typeChange();
+
+      this.getQuestion();
     }
   }
-}
+};
 </script>

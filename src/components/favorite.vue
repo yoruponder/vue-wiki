@@ -46,6 +46,7 @@
 <div class="favorite" v-if="data != null">
   <h3 class="com-title"><a href="javascript:;"><i class="fa fa-heart"></i>我的最爱</a></h3>
   <div class="fav-box clearfix">
+    <span v-if="info">{{info}}</span>
     <a v-for="(val,key) in data" :key="key" href="javascript:;">
       <span>{{val.collection_name}}</span>
       <span class="fa fa-close" @click="delFavorite(val.id)"></span>
@@ -60,7 +61,8 @@ export default {
   props:['id'],
   data () {
     return {
-      data: []
+      data: [],
+      info: ''
     }
   },
   methods: {
@@ -68,7 +70,9 @@ export default {
       ajax.post(Api,{c:'user',a:'favorite',navigation_id:this.id}).then(res => {
         if(res.status){
           this.data = res.data;
+          return;
         }
+        this.info = res.info;
       })
     },
     delFavorite(id){
