@@ -144,6 +144,23 @@
           </div>
         </div>
         <div class="hr-line"></div>
+        <ul class="reply-list" v-if="!edit">
+          <li class="reply-item" v-for="(v,k) in reply" :key="k">
+            <h4>
+              <div>
+                <img :src="v.userinfo.photo ? v.userinfo.photo : '/static/timg.jpeg'"/>
+                <span class="user">{{v.userinfo.username}}</span>|<span class="time">回答于{{v.reply_time}}</span>
+              </div>
+              <div>
+                <span class="button button-orange">刪除回答</span>
+                <router-link to="/" class="button">我要編輯</router-link>
+              </div>
+            </h4>
+            <div class="reply-detail">
+              <div class="editor-content clearfix" v-html="v.reply_content"></div>
+            </div>
+          </li>
+        </ul>
         <ue-editor ueId="content" height="300"/>
       </div>
       <right-block v-if="state" :id="issue.navigation_id" />
@@ -172,6 +189,7 @@ export default {
   data() {
     return {
       state: 0,
+      edit: 0,
       qid: this.$route.params.qid,
       issue: {},
       reply: []
