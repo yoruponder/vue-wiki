@@ -40,9 +40,6 @@ export default {
     return {
 
     };
-  },
-  beforeMount: function() {
-    //console.log(this.$route)
   }
 };
 </script>

@@ -12,11 +12,15 @@
 <script>
 export default {
   name: 'ueEditor',
-  props: ['ueId','height'],
+  props: ['ueId','height','reInit'],
+  data() {
+    return {
+      reload: this.reInit
+    };
+  },
   methods: {
     initEditor() {
       const ueId = this.ueId;
-      console.log(UE)
       const ueEditor = UE.getEditor(ueId, {
         toolbars: [
           ['fullscreen', 'source', 'undo', 'redo','simpleupload','imageleft','imageright','imagecenter',
@@ -32,10 +36,7 @@ export default {
       });
       const self = this;
       ueEditor.ready((ueditor) => {
-        if (!ueditor) {
-          UE.delEditor(ueId);
-          self.initEditor();
-        }
+        this.$emit('ready', ueEditor);
       });
     }
   },
@@ -44,6 +45,11 @@ export default {
   },
   beforeDestroy: function () {
     UE.delEditor(this.ueId);
+  }
+  watch:{
+    reload: function () {
+      this.initEditor();
+    }
   }
 }
 </script>

@@ -55,8 +55,6 @@ export default {
           return { name: "通知事項", link: "/notification" };
       }
     }
-  },
-  beforeMount: function() {
   }
 };
 </script>

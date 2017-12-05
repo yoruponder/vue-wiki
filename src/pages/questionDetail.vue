@@ -125,47 +125,55 @@
 <template>
 <div class="questionDetail-page">
   <wiki-head :id="issue.navigation_id" />
-    <bread-crumb :data="bread"/>
-    <div class="com-width clearfix">
-      <div class="index-left">
-        <div class="detail-box">
-          <h3>{{issue.issue_title}}</h3>
-          <p class="clearfix d-b-menu">
-            <span class="l">{{state ? issue.userinfo.username : '加載中...'}}<b>|</b>浏览{{issue.browse_num}}次</span>
-            <span class="r"><span>加入最爱</span><b>|</b>{{issue.issue_time}}</span>
-          </p>
-          <div class="d-b-cnt editor-content">
-            <div v-html="issue.issue_content"></div>
-          </div>
-          <div class="d-b-button">
-            <router-link class="button" :to="'/'">点我编辑</router-link>
-            <span class="hadClose">該問題已關閉</span>
-            <button class="button button-orange">关闭提问</button>
-          </div>
+  <bread-crumb :data="bread"/>
+  <div class="com-width clearfix">
+    <div class="index-left">
+      <div class="detail-box">
+        <h3>{{issue.issue_title}}</h3>
+        <p class="clearfix d-b-menu">
+          <span class="l">{{state ? issue.userinfo.username : '加載中...'}}<b>|</b>浏览{{issue.browse_num}}次</span>
+          <span class="r"><span>加入最爱</span><b>|</b>{{issue.issue_time}}</span>
+        </p>
+        <div class="d-b-cnt editor-content">
+          <div v-html="issue.issue_content"></div>
         </div>
-        <div class="hr-line"></div>
-        <ul class="reply-list" v-if="!edit">
-          <li class="reply-item" v-for="(v,k) in reply" :key="k">
-            <h4>
-              <div>
-                <img :src="v.userinfo.photo ? v.userinfo.photo : '/static/timg.jpeg'"/>
-                <span class="user">{{v.userinfo.username}}</span>|<span class="time">回答于{{v.reply_time}}</span>
-              </div>
-              <div>
-                <span class="button button-orange">刪除回答</span>
-                <router-link to="/" class="button">我要編輯</router-link>
-              </div>
-            </h4>
-            <div class="reply-detail">
-              <div class="editor-content clearfix" v-html="v.reply_content"></div>
-            </div>
-          </li>
-        </ul>
-        <ue-editor ueId="content" height="300"/>
+        <div class="d-b-button">
+          <router-link class="button" :to="`/edit/${issue.navigation_id}/${qid}`">点我编辑</router-link>
+          <span v-if="issue.status == 2" class="hadClose">該問題已關閉</span>
+          <button v-else class="button button-orange">关闭提问</button>
+        </div>
       </div>
-      <right-block v-if="state" :id="issue.navigation_id" />
+      <div class="hr-line"></div>
+      <ul class="reply-list" v-if="!edit">
+        <li class="reply-item" v-for="(v,k) in reply" :key="k">
+          <h4>
+            <div>
+              <img :src="v.userinfo.photo ? v.userinfo.photo : '/static/timg.jpeg'"/>
+              <span class="user">{{v.userinfo.username}}</span>|<span class="time">回答于{{v.reply_time}}</span>
+            </div>
+            <div>
+              <span class="button button-orange">刪除回答</span>
+              <span class="button" @click="getEditAnswer(v.id)">我要編輯</span>
+            </div>
+          </h4>
+          <div class="reply-detail">
+            <div class="editor-content clearfix" v-html="v.reply_content"></div>
+          </div>
+        </li>
+      </ul>
+      <h3 class="more-answer">{{edit ? '編輯回答':'我要補充'}}</h3>
+      <div>
+        <vue-ueditor @ready="editorReady"/>
+        <div class="edit-btn" v-if="edit">
+          <button type="button" class="button edit-answer">编辑完成</button>
+          <button class="button edit-cancle" @click="cancleEditAnswer">取消编辑</button>
+        </div>
+        <button v-else type="button" class="submit-ask button" @click="submitEditAnswer">提交回答</button>
+      </div>
     </div>
-    <wiki-footer/>
+    <!-- <right-block v-if="state" :id="issue.navigation_id" /> -->
+  </div>
+  <wiki-footer/>
 </div>
 </template>
 
@@ -173,7 +181,8 @@
 import wikiHead from "_COMP_/header";
 import breadCrumb from "_COMP_/breadCrumb";
 import collectionBlock from "_COMP_/collectionBlock";
-import ueEditor from "_COMP_/ueEditor";
+// import ueEditor from "_COMP_/ueEditor";
+import vueUeditor from '_COMP_/UEditor';
 import rightBlock from "_COMP_/rightBlock";
 import wikiFooter from "_COMP_/footer";
 
@@ -183,7 +192,8 @@ export default {
     wikiHead,
     breadCrumb,
     rightBlock,
-    ueEditor,
+    // ueEditor,
+    vueUeditor,
     wikiFooter
   },
   data() {
@@ -192,7 +202,10 @@ export default {
       edit: 0,
       qid: this.$route.params.qid,
       issue: {},
-      reply: []
+      reply: [],
+      editId: '',
+      editCnt: '',
+      editor: '',
     };
   },
   computed: {
@@ -248,6 +261,7 @@ export default {
         return [{ name: "數據加載中...", link: "/" }, { name: "問題詳情" }];
       }
     },
+    //详情数据
     getData() {
       let data = { c: "index", a: "issueInfo", issue_id: this.qid };
       ajax.post(Api, data).then(res => {
@@ -255,6 +269,80 @@ export default {
         this.issue = res.data.issues;
         this.reply = res.data.reply;
       });
+    },
+    //編輯器狀態
+    editorReady(ue){
+      this.editor = ue;
+    },
+    //获取编辑回答数据
+    getEditAnswer(id){
+      ajax.post(Api,{c:'user',a:'fetchEditReply',reply_id:id}).then((res)=>{
+        if(res.status == 1){
+          this.editId   = id;
+          this.edit     = 1;
+          this.editor.setContent(res.data.reply_content);
+        }else{
+          alert(res.info);
+          router.push({ path: `/questionDetail/${qid}`});
+        }
+      });
+    },
+    //提交回答编辑
+    submitEditAnswer(){
+      let data = {
+        c: 'user',
+        a: 'editReply',
+        reply_id: this.editId,
+        reply_content:  this.editor.getContent()
+      };
+      let _this   = this;
+      if(cnt){
+        ajax.post(Api,data).then(res => {
+          if(res.status == 1){
+            browserHistory.replace(_this.props.location.pathname);
+          }else{
+            alert(res.info);
+          }
+        });
+      }else{
+        alert('编辑内容不能为空');
+      }
+    },
+    //取消编辑回答
+    cancleEditAnswer(){
+      this.edit = 0;
+      this.editor.setContent("");
+    },
+    //刪除回答
+    delAnswer(id){
+        if(confirm('要刪除這條回答嗎，只有管理員可以刪除')){
+            Api.index.removeReply(id).then((res)=>{
+                if(res.status === 1){
+                    this.fetchDetail(this.state.issue_id);
+                }else{
+                    alert(res.info);
+                }
+            });
+        }
+    },
+    // 回复问题接口
+    replyIssue(){
+        let id      = this.state.issue_id;
+        let editor  = UE.getEditor('content');
+        let content = editor.getContent();
+        let _this   = this;
+        if(content){
+            Api.index.replyIssue(id,content).then((res)=>{
+                if(res.status == 1){
+                    _this.fetchDetail(id);
+                    editor.setContent('');
+                }else{
+                    alert(res.info)
+                }
+            });
+        }else{
+            alert('内容不能为空');
+        }
     }
   },
   beforeMount: function() {
