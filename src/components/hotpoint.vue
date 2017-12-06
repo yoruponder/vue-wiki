@@ -41,10 +41,10 @@
 <div class="hotpoint">
     <h3 class="com-title"><a href="javascript:;"><i className="fa fa-rocket"></i>热点问题</a></h3>
     <ul>
-      <li v-if="data == null">暫無數據</li>
+      <li v-if="data == null || data.length == 0">暫無數據</li>
       <li v-else v-for="(val, key) in data" :key="key" class="clearfix">
         <i class="fa fa-angle-right"></i>
-        <a class="que-title" href="javascript:;">{{val.issue_title}}</a>
+        <router-link class="que-title" :to="`/questionDetail/${val.id}`">{{val.issue_title}}</router-link>
         <a class="que-type" v-if="val.category_info" href="javascript:;">[{{val.category_info.category_name}}]</a>
         <span>{{val.reply_total?val.reply_total:0}}回答</span>
       </li>

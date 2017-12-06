@@ -1,14 +1,16 @@
 <style lang="scss">
 @import "../assets/css/baseVal.scss";
 .questionDetail-page {
-  .button {
-    width: 88px;
-    height: 24px;
-    line-height: 24px;
-    font-size: 12px;
-    margin-left: 20px;
-    &:hover {
-      color: #fff;
+  .index-left {
+    .button {
+      width: 88px;
+      height: 24px;
+      line-height: 24px;
+      font-size: 12px;
+      margin-left: 20px;
+      &:hover {
+        color: #fff;
+      }
     }
   }
   .detail-box {
@@ -140,7 +142,7 @@
         <div class="d-b-button">
           <router-link class="button" :to="`/edit/${issue.navigation_id}/${qid}`">点我编辑</router-link>
           <span v-if="issue.status == 2" class="hadClose">該問題已關閉</span>
-          <button v-else class="button button-orange">关闭提问</button>
+          <button v-else class="button button-orange" @click="closeIssue">关闭提问</button>
         </div>
       </div>
       <div class="hr-line"></div>
@@ -152,7 +154,7 @@
               <span class="user">{{v.userinfo.username}}</span>|<span class="time">回答于{{v.reply_time}}</span>
             </div>
             <div>
-              <span class="button button-orange">刪除回答</span>
+              <span class="button button-orange" @click="delAnswer(v.id)">刪除回答</span>
               <span class="button" @click="getEditAnswer(v.id)">我要編輯</span>
             </div>
           </h4>
@@ -165,10 +167,10 @@
       <div>
         <vue-ueditor @ready="editorReady"/>
         <div class="edit-btn" v-if="edit">
-          <button type="button" class="button edit-answer">编辑完成</button>
+          <button type="button" class="button edit-answer" @click="submitEditAnswer">编辑完成</button>
           <button class="button edit-cancle" @click="cancleEditAnswer">取消编辑</button>
         </div>
-        <button v-else type="button" class="submit-ask button" @click="submitEditAnswer">提交回答</button>
+        <button v-else type="button" class="submit-ask button" @click="replyIssue">提交回答</button>
       </div>
     </div>
     <!-- <right-block v-if="state" :id="issue.navigation_id" /> -->
@@ -182,7 +184,7 @@ import wikiHead from "_COMP_/header";
 import breadCrumb from "_COMP_/breadCrumb";
 import collectionBlock from "_COMP_/collectionBlock";
 // import ueEditor from "_COMP_/ueEditor";
-import vueUeditor from '_COMP_/UEditor';
+import vueUeditor from "_COMP_/UEditor";
 import rightBlock from "_COMP_/rightBlock";
 import wikiFooter from "_COMP_/footer";
 
@@ -203,9 +205,9 @@ export default {
       qid: this.$route.params.qid,
       issue: {},
       reply: [],
-      editId: '',
-      editCnt: '',
-      editor: '',
+      editId: "",
+      editCnt: "",
+      editor: ""
     };
   },
   computed: {
@@ -271,77 +273,139 @@ export default {
       });
     },
     //編輯器狀態
-    editorReady(ue){
+    editorReady(ue) {
       this.editor = ue;
     },
     //获取编辑回答数据
-    getEditAnswer(id){
-      ajax.post(Api,{c:'user',a:'fetchEditReply',reply_id:id}).then((res)=>{
-        if(res.status == 1){
-          this.editId   = id;
-          this.edit     = 1;
-          this.editor.setContent(res.data.reply_content);
-        }else{
-          alert(res.info);
-          router.push({ path: `/questionDetail/${qid}`});
-        }
-      });
+    getEditAnswer(id) {
+      ajax
+        .post(Api, { c: "user", a: "fetchEditReply", reply_id: id })
+        .then(res => {
+          if (res.status == 1) {
+            this.editId = id;
+            this.edit = 1;
+            this.editor.setContent(res.data.reply_content);
+          } else {
+            alert(res.info);
+            router.push({ path: `/questionDetail/${qid}` });
+          }
+        });
     },
     //提交回答编辑
-    submitEditAnswer(){
+    submitEditAnswer() {
       let data = {
-        c: 'user',
-        a: 'editReply',
+        c: "user",
+        a: "editReply",
         reply_id: this.editId,
-        reply_content:  this.editor.getContent()
+        reply_content: this.editor.getContent()
       };
-      let _this   = this;
-      if(cnt){
-        ajax.post(Api,data).then(res => {
-          if(res.status == 1){
-            browserHistory.replace(_this.props.location.pathname);
-          }else{
+      if (data.reply_content) {
+        ajax.post(Api, data).then(res => {
+          if (res.status == 1) {
+            // this.$router.replace(`/questionDetail/${this.qid}`);
+            this.cancleEditAnswer();
+            this.getData();
+          } else {
             alert(res.info);
           }
         });
-      }else{
-        alert('编辑内容不能为空');
+      } else {
+        alert("编辑内容不能为空");
       }
     },
     //取消编辑回答
-    cancleEditAnswer(){
+    cancleEditAnswer() {
       this.edit = 0;
       this.editor.setContent("");
     },
     //刪除回答
-    delAnswer(id){
-        if(confirm('要刪除這條回答嗎，只有管理員可以刪除')){
-            Api.index.removeReply(id).then((res)=>{
+    delAnswer(id) {
+      if (confirm("要刪除這條回答嗎，只有管理員可以刪除")) {
+        ajax.post(Api,{c:'user',a:'removeReply',id:id}).then(res => {
+          if (res.status === 1) {
+            this.getData();
+          } else {
+            alert(res.info);
+          }
+        });
+      }
+    },
+    // 回复问题接口
+    replyIssue() {
+      let data = {
+        c: 'user',
+        a: 'replyIssue',
+        issue_id: this.qid,
+        reply_content: this.editor.getContent()
+      };
+      if(data.reply_content){
+        ajax.post(Api,data).then(res => {
+          if(res.status == 1){
+            this.getData();            
+            this.editor.setContent("");
+          }else{
+            alert(res.info);
+          }
+        });
+      } else {
+        alert("内容不能为空");
+      }
+    },
+    //關閉問題
+    closeIssue() {
+      let data = {
+        c: 'user',
+        a: 'closeIssue',
+        issue_id: this.qid
+      };
+      if(confirm('你確定要關閉問題嗎，關閉后不能回答和補充')){
+        ajax.post(Api,data).then(res=>{
+          if(res.status == 1){
+              this.getData();
+          }else{
+              alert(res.info);
+          }
+        });
+      }
+    },
+    addFavorite() {
+        this.props.dispatch(popboxShow({
+            tle: '加入我的最愛',
+            cnt: `<p style="margin-bottom:10px;">将该问题加入我的最爱。</p>
+                <input class="j-fav-name" type="text" placeholder="请输入名称" autofocus="autofocus"/>
+            `,
+            shadow: 0,
+            btnGroup: [
+                {
+                    type: 'ok',
+                    txt: '確定',
+                    fn: ()=>{
+                        this.doAddFavorite(this.state.issues.navigation_id);
+                    }
+                },
+                {
+                    type: 'cle',
+                    txt:  '取消'
+                }
+            ]
+        }));
+    },
+    doAddFavorite(navigation_id) {
+        let issue_id = this.state.issue_id;
+        let cnt      = $('.j-fav-name').val();
+        let nid      = navigation_id;
+        if(cnt){
+            Api.index.addFavorite(issue_id,cnt,nid).then((res)=>{
                 if(res.status === 1){
-                    this.fetchDetail(this.state.issue_id);
+                    this.props.dispatch(popboxClose());
+                    alert('添加成功');
+                    window.location.reload();
                 }else{
                     alert(res.info);
                 }
             });
-        }
-    },
-    // 回复问题接口
-    replyIssue(){
-        let id      = this.state.issue_id;
-        let editor  = UE.getEditor('content');
-        let content = editor.getContent();
-        let _this   = this;
-        if(content){
-            Api.index.replyIssue(id,content).then((res)=>{
-                if(res.status == 1){
-                    _this.fetchDetail(id);
-                    editor.setContent('');
-                }else{
-                    alert(res.info)
-                }
-            });
         }else{
-            alert('内容不能为空');
+            alert('请填入名称');
         }
     }
   },
