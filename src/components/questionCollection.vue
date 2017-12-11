@@ -49,7 +49,7 @@
 <template>
 <div class="questionCollection">
   <h3 class="com-title"><i class="fa fa-file-text"></i>
-    <a href="javascript:;">问题分类<i class="fa fa-arrow-circle-right"></i></a>
+    <router-link :to="`/collection/${nid}`">问题分类<i class="fa fa-arrow-circle-right"></i></router-link>
   </h3>
   <ul v-if="data.length" class="que-coll-box">
     <li v-for="(v,k) in data" :key="'qtype' + k">
@@ -71,12 +71,7 @@
 <script>
 export default {
   name: "questionCollection",
-  props: ["data"],
-  data() {
-    return {};
-  },
-  methods: {},
-  beforeMount: function() {}
+  props: ["data","nid"]
 };
 </script>
 

@@ -47,7 +47,7 @@
   <h3 class="com-title"><a href="javascript:;"><i class="fa fa-heart"></i>我的最爱</a></h3>
   <div class="fav-box clearfix">
     <span v-if="info">{{info}}</span>
-    <span v-if="data.length == 0">暫無數據</span>
+    <span v-else-if="data.length == 0">暫無數據</span>
     <router-link v-else v-for="(val,key) in data" :key="key" :to="`/questionDetail/${val.issue_id}`">
       <span>{{val.collection_name}}</span>
       <span class="fa fa-close" @click.prevent="delFavorite(val.id)"></span>

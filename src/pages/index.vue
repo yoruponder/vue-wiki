@@ -5,7 +5,7 @@
     <div class="com-width clearfix">
       <div class="index-left">
         <hot-point :data="hot_issue"/>
-        <question-collection :data="category"/>
+        <question-collection :data="category" :nid="navigation_id"/>
       </div>
       <right-block :id="navigation_id" />
     </div>
