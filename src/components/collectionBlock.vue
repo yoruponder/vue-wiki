@@ -206,7 +206,7 @@ export default {
   },
   methods: {
     getCategory() {
-      ajax.post(Api, { c: "index", a: "index", navigation_id: this.nid }).then(res => {
+      ajax.get(Api, {params:{ c: "index", a: "index", navigation_id: this.nid }}).then(res => {
         this.category = res.data.category;
       });
     },
@@ -240,7 +240,7 @@ export default {
         tag: this.tagid
       };
 
-      ajax.post(Api,data).then(res => {
+      Api.issue(data).then(res => {
         this.issue = res.data.issue;
         this.count = res.data.count;
       });

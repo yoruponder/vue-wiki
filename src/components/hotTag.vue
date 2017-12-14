@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     getTag(){
-      ajax.post(Api,{c:'index',a:'hotTag',navigation_id:this.id}).then(res => {
+      Api.hotTag({c:'index',a:'hotTag',navigation_id:this.id}).then(res => {
         if(res.status){
           this.data = res.data;
         }

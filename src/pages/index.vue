@@ -46,7 +46,7 @@ export default {
   },
   methods: {
     requestData() {
-      ajax.post(Api, { c: "index", a: "index", navigation_id: this.nid }).then(res => {
+      Api.index({ c: "index", a: "index", navigation_id: this.nid }).then(res => {
           this.info = res.data.headinfo;
           this.hot_issue = res.data.hot_issue;
           this.category = res.data.category;

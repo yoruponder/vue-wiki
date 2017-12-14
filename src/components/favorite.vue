@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     getFavorite() {
-      ajax.post(Api, { c: "user", a: "favorite", navigation_id: this.id }).then(res => {
+      Api.favorite({ c: "user", a: "favorite", navigation_id: this.id }).then(res => {
           if (res.status) {
             this.data = res.data;
             return;
@@ -78,7 +78,7 @@ export default {
     },
     delFavorite(id) {
       if (confirm("確認要刪除該條記錄嗎")) {
-        ajax.post(Api,{c:'user',a:'unCollection',id:id}).then(res => {
+        ajax.post(Api,{params:{c:'user',a:'unCollection',id:id}}).then(res => {
           if (res.status == 1) {
             this.getFavorite();
           } else {

@@ -173,7 +173,7 @@
         <button v-else type="button" class="submit-ask button" @click="replyIssue">提交回答</button>
       </div>
     </div>
-    <!-- <right-block v-if="state" :id="issue.navigation_id" /> -->
+    <right-block v-if="state" :id="issue.navigation_id" />
   </div>
   <wiki-footer/>
 </div>
@@ -183,7 +183,6 @@
 import wikiHead from "_COMP_/header";
 import breadCrumb from "_COMP_/breadCrumb";
 import collectionBlock from "_COMP_/collectionBlock";
-// import ueEditor from "_COMP_/ueEditor";
 import vueUeditor from "_COMP_/UEditor";
 import rightBlock from "_COMP_/rightBlock";
 import wikiFooter from "_COMP_/footer";
@@ -194,7 +193,6 @@ export default {
     wikiHead,
     breadCrumb,
     rightBlock,
-    // ueEditor,
     vueUeditor,
     wikiFooter
   },
@@ -266,7 +264,7 @@ export default {
     //详情数据
     getData() {
       let data = { c: "index", a: "issueInfo", issue_id: this.qid };
-      ajax.post(Api, data).then(res => {
+      Api.detail(data).then(res => {
         this.state = 1;
         this.issue = res.data.issues;
         this.reply = res.data.reply;
@@ -278,18 +276,16 @@ export default {
     },
     //获取编辑回答数据
     getEditAnswer(id) {
-      ajax
-        .post(Api, { c: "user", a: "fetchEditReply", reply_id: id })
-        .then(res => {
-          if (res.status == 1) {
-            this.editId = id;
-            this.edit = 1;
-            this.editor.setContent(res.data.reply_content);
-          } else {
-            alert(res.info);
-            router.push({ path: `/questionDetail/${qid}` });
-          }
-        });
+      Api.getEditAnswer({ c: "user", a: "fetchEditReply", reply_id: id }).then(res => {
+        if (res.status == 1) {
+          this.editId = id;
+          this.edit = 1;
+          this.editor.setContent(res.data.reply_content);
+        } else {
+          alert(res.info);
+          router.push({ path: `/questionDetail/${qid}` });
+        }
+      });
     },
     //提交回答编辑
     submitEditAnswer() {
@@ -300,9 +296,8 @@ export default {
         reply_content: this.editor.getContent()
       };
       if (data.reply_content) {
-        ajax.post(Api, data).then(res => {
+        Api.submitEditAnswer(data).then(res => {
           if (res.status == 1) {
-            // this.$router.replace(`/questionDetail/${this.qid}`);
             this.cancleEditAnswer();
             this.getData();
           } else {
@@ -321,7 +316,7 @@ export default {
     //刪除回答
     delAnswer(id) {
       if (confirm("要刪除這條回答嗎，只有管理員可以刪除")) {
-        ajax.post(Api,{c:'user',a:'removeReply',id:id}).then(res => {
+        Api.delAnswer({c:'user',a:'removeReply',id:id}).then(res => {
           if (res.status === 1) {
             this.getData();
           } else {
@@ -339,7 +334,7 @@ export default {
         reply_content: this.editor.getContent()
       };
       if(data.reply_content){
-        ajax.post(Api,data).then(res => {
+        Api.replyIssue(data).then(res => {
           if(res.status == 1){
             this.getData();            
             this.editor.setContent("");
@@ -359,7 +354,7 @@ export default {
         issue_id: this.qid
       };
       if(confirm('你確定要關閉問題嗎，關閉后不能回答和補充')){
-        ajax.post(Api,data).then(res=>{
+        Api.closeIssue(data).then(res=>{
           if(res.status == 1){
               this.getData();
           }else{

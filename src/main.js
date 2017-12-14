@@ -10,9 +10,25 @@ import '_CSS_/reset.scss';
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  template: '<App/>',
-  components: { App }
-})
+function vueInit(){
+  new Vue({
+    el: '#app',
+    router,
+    template: '<App/>',
+    components: { App }
+  });
+}
+
+(function() {
+  // if ('serviceWorker' in navigator) {
+  //   window.addEventListener('load', () => {
+  //     navigator.serviceWorker.register('/static/sw.js').then(registration => {
+  //       console.log('SW registered: ', registration);
+  //       //registration.pushManager.subscribe({ userVisibleOnly: true });
+  //     }).catch(registrationError => {
+  //       console.log('SW registration failed: ', registrationError);
+  //     });
+  //   });
+  // }
+  vueInit();
+})();
