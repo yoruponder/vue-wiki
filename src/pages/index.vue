@@ -20,6 +20,7 @@ import hotPoint from "_COMP_/hotPoint";
 import rightBlock from "_COMP_/rightBlock";
 import wikiFooter from "_COMP_/footer";
 import questionCollection from "_COMP_/questionCollection";
+import { mapState } from "vuex";
 
 export default {
   name: "idx",
@@ -59,6 +60,7 @@ export default {
     }
   },
   beforeMount: function() {
+    console.log(this.$store.state)
     this.requestData();
   }
 };

@@ -134,7 +134,7 @@
         <h3>{{issue.issue_title}}</h3>
         <p class="clearfix d-b-menu">
           <span class="l">{{state ? issue.userinfo.username : '加載中...'}}<b>|</b>浏览{{issue.browse_num}}次</span>
-          <span class="r"><span>加入最爱</span><b>|</b>{{issue.issue_time}}</span>
+          <span class="r"><span @click="addFavorite">加入最爱</span><b>|</b>{{issue.issue_time}}</span>
         </p>
         <div class="d-b-cnt editor-content">
           <div v-html="issue.issue_content"></div>
@@ -175,6 +175,8 @@
     </div>
     <right-block v-if="state" :id="issue.navigation_id" />
   </div>
+  <popbox/>
+  <shadow-component/>
   <wiki-footer/>
 </div>
 </template>
@@ -186,6 +188,9 @@ import collectionBlock from "_COMP_/collectionBlock";
 import vueUeditor from "_COMP_/UEditor";
 import rightBlock from "_COMP_/rightBlock";
 import wikiFooter from "_COMP_/footer";
+import popbox from "_COMP_/popbox";
+import shadowComponent from "_COMP_/shadow";
+import { mapActions } from "vuex";
 
 export default {
   name: "questionDetail",
@@ -194,7 +199,9 @@ export default {
     breadCrumb,
     rightBlock,
     vueUeditor,
-    wikiFooter
+    wikiFooter,
+    popbox,
+    shadowComponent
   },
   data() {
     return {
@@ -204,7 +211,6 @@ export default {
       issue: {},
       reply: [],
       editId: "",
-      editCnt: "",
       editor: ""
     };
   },
@@ -214,6 +220,12 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      sdshow: "shadow/show",
+      sdhide: "shadow/hide",
+      pbshow: "popbox/show",
+      pbhide: "popbox/hide"
+    }),
     fromLink() {
       if (this.state) {
         let data = this.issue;
@@ -228,10 +240,10 @@ export default {
 
         switch (nid) {
           case "1":
-            breadArray.push({ name: "8591寶物交易網", link: "/collection/1" });
+            breadArray.push({ name: "8591寶物交易網", link: "/collection/8591" });
             break;
           case "2":
-            breadArray.push({ name: "100室內設計", link: "/collection/2" });
+            breadArray.push({ name: "100室內設計", link: "/collection/100" });
             break;
           case "3":
             breadArray.push({ name: "客服充電站", link: "/life" });
@@ -276,7 +288,11 @@ export default {
     },
     //获取编辑回答数据
     getEditAnswer(id) {
-      Api.getEditAnswer({ c: "user", a: "fetchEditReply", reply_id: id }).then(res => {
+      Api.getEditAnswer({
+        c: "user",
+        a: "fetchEditReply",
+        reply_id: id
+      }).then(res => {
         if (res.status == 1) {
           this.editId = id;
           this.edit = 1;
@@ -316,7 +332,7 @@ export default {
     //刪除回答
     delAnswer(id) {
       if (confirm("要刪除這條回答嗎，只有管理員可以刪除")) {
-        Api.delAnswer({c:'user',a:'removeReply',id:id}).then(res => {
+        Api.delAnswer({ c: "user", a: "removeReply", id: id }).then(res => {
           if (res.status === 1) {
             this.getData();
           } else {
@@ -328,17 +344,17 @@ export default {
     // 回复问题接口
     replyIssue() {
       let data = {
-        c: 'user',
-        a: 'replyIssue',
+        c: "user",
+        a: "replyIssue",
         issue_id: this.qid,
         reply_content: this.editor.getContent()
       };
-      if(data.reply_content){
+      if (data.reply_content) {
         Api.replyIssue(data).then(res => {
-          if(res.status == 1){
-            this.getData();            
+          if (res.status == 1) {
+            this.getData();
             this.editor.setContent("");
-          }else{
+          } else {
             alert(res.info);
           }
         });
@@ -349,59 +365,65 @@ export default {
     //關閉問題
     closeIssue() {
       let data = {
-        c: 'user',
-        a: 'closeIssue',
+        c: "user",
+        a: "closeIssue",
         issue_id: this.qid
       };
-      if(confirm('你確定要關閉問題嗎，關閉后不能回答和補充')){
-        Api.closeIssue(data).then(res=>{
-          if(res.status == 1){
-              this.getData();
-          }else{
-              alert(res.info);
+      if (confirm("你確定要關閉問題嗎，關閉后不能回答和補充")) {
+        Api.closeIssue(data).then(res => {
+          if (res.status == 1) {
+            this.getData();
+          } else {
+            alert(res.info);
           }
         });
       }
     },
     addFavorite() {
-        this.props.dispatch(popboxShow({
-            tle: '加入我的最愛',
-            cnt: `<p style="margin-bottom:10px;">将该问题加入我的最爱。</p>
-                <input class="j-fav-name" type="text" placeholder="请输入名称" autofocus="autofocus"/>
-            `,
-            shadow: 0,
-            btnGroup: [
-                {
-                    type: 'ok',
-                    txt: '確定',
-                    fn: ()=>{
-                        this.doAddFavorite(this.state.issues.navigation_id);
-                    }
-                },
-                {
-                    type: 'cle',
-                    txt:  '取消'
-                }
-            ]
-        }));
+      this.sdshow({
+        fn: () => this.closePopbox()
+      });
+      this.pbshow({
+        tle: "加入我的最愛",
+        cnt: `<p style="margin:30px 0 10px;font-size:16px;">将该问题加入我的最爱。</p>
+        <input class="j-fav-name" type="text" placeholder="请输入名称" autofocus="autofocus"/>`,
+        btn: [
+          {
+            txt: "確定",
+            type: "ok",
+            fn: () => {
+              this.doAddFavorite(this.issue.navigation_id);
+            }
+          }
+        ]
+      });
     },
     doAddFavorite(navigation_id) {
-        let issue_id = this.state.issue_id;
-        let cnt      = $('.j-fav-name').val();
-        let nid      = navigation_id;
-        if(cnt){
-            Api.index.addFavorite(issue_id,cnt,nid).then((res)=>{
-                if(res.status === 1){
-                    this.props.dispatch(popboxClose());
-                    alert('添加成功');
-                    window.location.reload();
-                }else{
-                    alert(res.info);
-                }
-            });
-        }else{
-            alert('请填入名称');
-        }
+      let data = {
+        c: "user",
+        a: "collection",
+        issue_id: this.qid,
+        collection_name: document.getElementsByClassName("j-fav-name")[0].value,
+        navigation_id: navigation_id
+      };
+
+      if (data.collection_name) {
+        Api.addFavorite(data).then(res => {
+          if (res.status === 1) {
+            this.closePopbox();
+            alert("添加成功");
+            window.location.reload();
+          } else {
+            alert(res.info);
+          }
+        });
+      } else {
+        alert("请填入名称");
+      }
+    },
+    closePopbox() {
+      this.pbhide();
+      this.sdhide();
     }
   },
   beforeMount: function() {

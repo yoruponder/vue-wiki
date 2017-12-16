@@ -1,15 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import popbox from "./modules/popbox"
+import shadow from "./modules/shadow"
 
 Vue.use(Vuex)
-
-const store = new Vuex.Store({
-  state: {
-    count: 0
-  },
-  mutations: {
-    increment(state){
-      state.count++
-    }
+export default new Vuex.Store({
+  modules:{
+    popbox,
+    shadow
   }
 })

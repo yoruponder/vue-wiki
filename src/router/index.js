@@ -11,7 +11,7 @@ export default new Router({
       component: () => ({
         component: import ( /* webpackChunkName: "index" */ '_PAGE_/index'),
       }),
-      props: {nid: 1}
+      props: {nid: 8591}
     },
     {
       path: '/100',
@@ -19,14 +19,13 @@ export default new Router({
       component: () => ({
         component: import ( /* webpackChunkName: "index" */ '_PAGE_/index'),
       }),
-      props: {nid: 2}
+      props: {nid: 100}
     },
     {
       path: '/collection/:nid/:cat1?/:cat2?',
       name: 'collection',
       component: () => ({
         component: import ( /* webpackChunkName: "collection" */ '_PAGE_/collection'),
-
       })
     },
     {
@@ -34,12 +33,15 @@ export default new Router({
       name: 'questionDetail',
       component: () => ({
         component: import ( /* webpackChunkName: "questionDetail" */ '_PAGE_/questionDetail'),
-
-
-
       })
     },
-
+    {
+      path: '/edit/:nid/:qid',
+      name: 'edit',
+      component: () => ({
+        component: import( /* webpackChunkName: "edit" */ '_PAGE_/edit'),
+      })
+    },
 
   ]
 })
