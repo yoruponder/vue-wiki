@@ -1,69 +1,16 @@
-<style lang="scss">
-@import "../assets/css/baseVal.scss";
-$comMargin: 12px 0 32px;
-
-.ask-page {
-  .index-left input {
-    margin: $comMargin;
-  }
-  .select-type {
-    margin: $comMargin;
-    select {
-      width: 250px;
-      height: 32px;
-    }
-  }
-  .select-tag {
-    margin: $comMargin;
-    .choosen {
-      background: $baseColor;
-      color: #fff;
-    }
-    a {
-      cursor: pointer;
-      display: block;
-      float: left;
-      border: 1px solid $baseColor;
-      color: $baseColor;
-      width: 140px;
-      height: $comlh;
-      line-height: $comlh;
-      text-align: center;
-      border-radius: 4px;
-      margin: 6px 5px;
-      transition: all 0.2s;
-      i {
-        pointer-events: none;
-      }
-    }
-    a:hover {
-      background: $baseColor;
-      color: #fff;
-    }
-  }
-  .wiki-editor {
-    margin: $comMargin;
-  }
-  .submit-ask {
-    display: block;
-    margin: 0 auto;
-    margin-top: 40px;
-  }
-}
-</style>
-
-
 <template>
 <div class="ask-page">
-  <wiki-head :id="qid" />
+  <wiki-head :id="nid" />
   <div class="page-cnt page-cnt-pd clearfix">
     <bread-crumb :data="bread"/>
     <div class="com-width clearfix">
       <div class="index-left">
         <h3>标题：</h3>
-        <input type="text" placeholder="请填写提问标题" :value="title" />
+        <input type="text" placeholder="请填写提问标题" :value="title" @change="changeTitle" />
         <h3>选择标签（可多选）</h3>
-        <div class="select-tag clearfix"></div>
+        <div class="select-tag clearfix">
+          <span v-for="(v,k) in tag" :key="k" :class="selTagList.indexOf(v.id) > -1 ? 'choosen' : ''" @click="selTag(v.id)"><i class="fa fa-hashtag"></i>{{v.content}}</span>
+        </div>
         <h3>问题描述</h3>
         <vue-ueditor @ready="editorReady"/>
         <button type="button" class="submit-ask button" @click="finishEdit">发布提问</button>
@@ -81,6 +28,7 @@ import breadCrumb from "_COMP_/breadCrumb";
 import vueUeditor from "_COMP_/UEditor";
 import rightBlock from "_COMP_/rightBlock";
 import wikiFooter from "_COMP_/footer";
+import "_ASET_/css/ask.scss";
 
 export default {
   name: "edit",
@@ -93,12 +41,13 @@ export default {
   },
   data() {
     return {
-      title: "",
+      title: '',
       nid: this.$route.params.nid,
       qid: this.$route.params.qid,
       tag: [],
       selTagList: [],
-      editor: ""
+      editor: '',
+      editcnt: ''
     };
   },
   computed: {
@@ -130,6 +79,9 @@ export default {
       breadArray.push({name: '编辑问题'});
       return breadArray;
     },
+    changeTitle(e){
+      this.title = e.target.value;
+    },
     getData() {
       Api.editIssue({
         c: "user",
@@ -139,7 +91,7 @@ export default {
         if (res.status === 1) {
           let selTagList = [];
 
-          if (res.data.tag) {
+          if(res.data.tag) {
             for (let i = 0; i < res.data.tag.length; i++) {
               if (res.data.tag[i]["check"] === 1) {
                 selTagList.push(res.data.tag[i]["id"]);
@@ -149,6 +101,7 @@ export default {
           this.title = res.data.issue_title;
           this.tag = res.data.tag ? res.data.tag : [];
           this.selTagList = selTagList;
+          this.editcnt = res.data.issue_content;
         } else {
           alert(res.info);
           router.push({ path: `/questionDetail/${this.qid}` });
@@ -160,18 +113,17 @@ export default {
         c: "user",
         a: "editIssue",
         issue_id: this.qid,
-        issue_title: this.state.title,
-        issue_content: UE.getEditor("content").getContent(),
+        issue_title: this.title,
+        issue_content: this.editor.getContent(),
         issue_tag: this.selTagList.join(",")
       };
-
       Api.finishEdit(data).then(res => {
         if (res.status == 1) {
           alert("編輯成功");
         } else {
           alert(res.info);
         }
-        router.push({ path: `/questionDetail/${this.qid}` });
+        this.$router.push({ path: `/questionDetail/${this.qid}` });
       });
     },
     selTag(id) {
@@ -183,6 +135,21 @@ export default {
         newArr.push(id);
       }
       this.selTagList = newArr;
+    }
+  },
+  beforeMount: function() {
+    this.getData();
+  },
+  watch: {
+    editcnt: function() {
+      if(this.editor && this.editcnt){
+        this.editor.setContent(this.editcnt);
+      }
+    },
+    editor: function() {
+      if(this.editor && this.editcnt){
+        this.editor.setContent(this.editcnt);        
+      }
     }
   }
 };

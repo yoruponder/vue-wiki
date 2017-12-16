@@ -25,6 +25,7 @@ Api.replyIssue = (data) => ajax.post(requestUrl, data);
 Api.closeIssue = (data) => ajax.get(requestUrl, { params: data });
 Api.addFavorite = (data) => ajax.get(requestUrl, { params: data });
 Api.editIssue = (data) => ajax.get(requestUrl, { params: data });
+Api.finishEdit = (data) => ajax.post(requestUrl, data);
 
 
 

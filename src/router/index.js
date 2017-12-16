@@ -42,6 +42,13 @@ export default new Router({
         component: import( /* webpackChunkName: "edit" */ '_PAGE_/edit'),
       })
     },
+    {
+      path: '/ask/:nid',
+      name: 'ask',
+      component: () => ({
+        component: import( /* webpackChunkName: "edit" */ '_PAGE_/ask'),
+      })
+    },
 
   ]
 })

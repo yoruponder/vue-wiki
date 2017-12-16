@@ -60,7 +60,6 @@ export default {
     }
   },
   beforeMount: function() {
-    console.log(this.$store.state)
     this.requestData();
   }
 };

@@ -299,7 +299,7 @@ export default {
           this.editor.setContent(res.data.reply_content);
         } else {
           alert(res.info);
-          router.push({ path: `/questionDetail/${qid}` });
+          this.$router.push({ path: `/questionDetail/${qid}` });
         }
       });
     },

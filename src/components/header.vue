@@ -72,7 +72,7 @@
         <div class="srh-box">
             <input ref="srhInput" type="text" class="srh-input" placeholder="请输入搜索内容"/>
             <button type="button" class="button srh-btn" >搜索</button>
-            <a class="button button-orange ask-btn">我要提问</a>
+            <router-link :to="`/ask/${id}`" class="button button-orange ask-btn">我要提问</router-link>
         </div>
     </div>
     <div class="head-nav">
@@ -89,6 +89,7 @@
 <script>
 export default {
   name: "wikiHead",
+  props:['id'],
   data() {
     return {};
   }

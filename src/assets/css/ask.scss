@@ -1,0 +1,50 @@
+@import "./baseVal.scss";
+$comMargin: 12px 0 32px;
+.ask-page {
+  .index-left input {
+    margin: $comMargin;
+  }
+  .select-type {
+    margin: $comMargin;
+    select {
+      width: 250px;
+      height: 32px;
+    }
+  }
+  .select-tag {
+    margin: $comMargin;
+    .choosen {
+      background: $baseColor;
+      color: #fff;
+    }
+    span {
+      cursor: pointer;
+      display: block;
+      float: left;
+      border: 1px solid $baseColor;
+      color: $baseColor;
+      width: 140px;
+      height: $comlh;
+      line-height: $comlh;
+      text-align: center;
+      border-radius: 4px;
+      margin: 6px 5px;
+      transition: all 0.2s;
+      i {
+        pointer-events: none;
+      }
+      &:hover {
+        background: $baseColor;
+        color: #fff;
+      }
+    }
+  }
+  .wiki-editor {
+    margin: $comMargin;
+  }
+  .submit-ask {
+    display: block;
+    margin: 0 auto;
+    margin-top: 40px;
+  }
+}
