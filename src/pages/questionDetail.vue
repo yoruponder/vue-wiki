@@ -239,10 +239,10 @@ export default {
         let c2id = data.category_two;
 
         switch (nid) {
-          case "1":
+          case "8591":
             breadArray.push({ name: "8591寶物交易網", link: "/collection/8591" });
             break;
-          case "2":
+          case "100":
             breadArray.push({ name: "100室內設計", link: "/collection/100" });
             break;
           case "3":
@@ -299,7 +299,7 @@ export default {
           this.editor.setContent(res.data.reply_content);
         } else {
           alert(res.info);
-          this.$router.push({ path: `/questionDetail/${qid}` });
+          this.$router.push({ path: `/question/${qid}` });
         }
       });
     },

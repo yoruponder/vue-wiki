@@ -29,7 +29,7 @@ export default new Router({
       })
     },
     {
-      path: '/questionDetail/:qid',
+      path: '/question/:qid',
       name: 'questionDetail',
       component: () => ({
         component: import ( /* webpackChunkName: "questionDetail" */ '_PAGE_/questionDetail'),

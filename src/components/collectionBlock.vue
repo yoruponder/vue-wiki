@@ -139,7 +139,7 @@
           </tr>
           <tr v-else v-for="(v,k) in issue" :key="k">
             <td class="q-l-tle">
-              <router-link :to="`/questionDetail/${v.id}`">
+              <router-link :to="`/question/${v.id}`">
                 {{v.issue_title}}
                 <span>{{v.tag_info ? `[${v.tag_info.content}]` : ''}}</span>
               </router-link>

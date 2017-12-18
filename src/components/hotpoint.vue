@@ -44,7 +44,7 @@
       <li v-if="data == null || data.length == 0">暫無數據</li>
       <li v-else v-for="(val, key) in data" :key="key" class="clearfix">
         <i class="fa fa-angle-right"></i>
-        <router-link class="que-title" :to="`/questionDetail/${val.id}`">{{val.issue_title}}</router-link>
+        <router-link class="que-title" :to="`/question/${val.id}`">{{val.issue_title}}</router-link>
         <a class="que-type" v-if="val.category_info" href="javascript:;">[{{val.category_info.category_name}}]</a>
         <span>{{val.reply_total?val.reply_total:0}}回答</span>
       </li>

@@ -104,7 +104,7 @@ export default {
           this.editcnt = res.data.issue_content;
         } else {
           alert(res.info);
-          router.push({ path: `/questionDetail/${this.qid}` });
+          router.push({ path: `/question/${this.qid}` });
         }
       });
     },
@@ -123,7 +123,7 @@ export default {
         } else {
           alert(res.info);
         }
-        this.$router.push({ path: `/questionDetail/${this.qid}` });
+        this.$router.push({ path: `/question/${this.qid}` });
       });
     },
     selTag(id) {

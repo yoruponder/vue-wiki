@@ -26,6 +26,9 @@ Api.closeIssue = (data) => ajax.get(requestUrl, { params: data });
 Api.addFavorite = (data) => ajax.get(requestUrl, { params: data });
 Api.editIssue = (data) => ajax.get(requestUrl, { params: data });
 Api.finishEdit = (data) => ajax.post(requestUrl, data);
+Api.category = (data) => ajax.get(requestUrl, { params: data });
+Api.navTag = (data) => ajax.get(requestUrl, { params: data });
+Api.submitIssue = (data) => ajax.post(requestUrl, data);
 
 
 
