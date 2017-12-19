@@ -46,7 +46,14 @@ export default new Router({
       path: '/ask/:nid',
       name: 'ask',
       component: () => ({
-        component: import( /* webpackChunkName: "edit" */ '_PAGE_/ask'),
+        component: import( /* webpackChunkName: "ask" */ '_PAGE_/ask'),
+      })
+    },
+    {
+      path: '/life',
+      name: 'life',
+      component: () => ({
+        component: import( /* webpackChunkName: "life" */ '_PAGE_/life'),
       })
     },
 

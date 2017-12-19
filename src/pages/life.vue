@@ -1,13 +1,16 @@
 <template>
-  <div class="idx-page">
-    <wiki-head :id="navigation_id" />
-    <top-info :info="info" />
+  <div class="life-page">
+    <wiki-head :id="nid" />
     <div class="com-width clearfix">
       <div class="index-left">
-        <hot-point :data="hot_issue"/>
-        <question-collection :data="category" :nid="navigation_id"/>
+        <div :style="{marginBottom:'40px'}">
+          <life-recommend :data="recommend"/>
+        </div>
+        <template v-if="category.length">
+          <life-idx-list v-for="(v,k) in category" :key="k" :data="v"/>
+        </template>
       </div>
-      <right-block :id="navigation_id" />
+      <right-block :id="nid" />
     </div>
     <wiki-footer/>
   </div>
@@ -15,48 +18,34 @@
 
 <script>
 import wikiHead from "_COMP_/header";
-import topInfo from "_COMP_/topInfo";
-import hotPoint from "_COMP_/hotPoint";
+import lifeRecommend from "_COMP_/LifeRecommend";
+import lifeIdxList from "_COMP_/lifeIdxList";
 import rightBlock from "_COMP_/rightBlock";
 import wikiFooter from "_COMP_/footer";
-import questionCollection from "_COMP_/questionCollection";
 import { mapState } from "vuex";
 
 export default {
-  name: "idx",
+  name: "life",
   components: {
     wikiHead,
-    topInfo,
-    hotPoint,
+    lifeRecommend,
+    lifeIdxList,
     rightBlock,
-    questionCollection,
     wikiFooter
   },
-  props:['nid'],
   data() {
     return {
-      info: {
-        solution: "N/A",
-        wait: "N/A",
-        online: "N/A"
-      },
-      hot_issue: [],
-      category: [],
-      navigation_id: this.nid
+      nid: 3,
+      recommend: [],
+      category: []
     };
   },
   methods: {
     requestData() {
-      Api.index({ c: "index", a: "index", navigation_id: this.nid }).then(res => {
-          this.info = res.data.headinfo;
-          this.hot_issue = res.data.hot_issue;
-          this.category = res.data.category;
-        });
-    }
-  },
-  watch: {
-    nid: function() {
-      this.requestData();
+      Api.life({c:'index',a:'charge'}).then(res => {
+        this.recommend = res.data.head ? res.data.head : [];
+        this.category = res.data.category ? res.data.category : []
+      });
     }
   },
   beforeMount: function() {

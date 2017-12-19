@@ -26,3 +26,29 @@ export let json2url = (data) => {
     }).join('&');
     return url
 }
+export function stringCut(str, num) {  //切割字符串
+    let newStr = str ? str : '';
+    if (newStr.length > num) {
+        newStr = str.slice(0, num);
+        newStr += '...';
+    }
+    return newStr;
+}
+//数组随机
+export function shuffle(array) {
+    var m = array.length, t, i;
+
+    // While there remain elements to shuffle…
+    while (m) {
+
+        // Pick a remaining element…
+        i = Math.floor(Math.random() * m--);
+
+        // And swap it with the current element.
+        t = array[m];
+        array[m] = array[i];
+        array[i] = t;
+    }
+
+    return array;
+}
