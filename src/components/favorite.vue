@@ -1,51 +1,7 @@
-<style lang="scss">
-@import "../assets/css/baseVal.scss";
-
-.favorite {
-  .fav-box {
-    display: flex;
-    padding: 10px 25px;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    a {
-      display: flex;
-      width: 140px;
-      height: $comlh;
-      margin: 6px 5px;
-      padding: 0 8px;
-      justify-content: space-between;
-      border-radius: 4px;
-      background: $baseColor;
-      color: #fff;
-      span {
-        align-self: center;
-      }
-      .fa-close {
-        display: none;
-        width: 16px;
-        height: 16px;
-        line-height: 16px;
-        text-align: center;
-        border-radius: 8px;
-        background: #fff;
-        color: $baseColor;
-      }
-      .fa-close:hover {
-        background: #f00;
-        color: #fff;
-      }
-      &:hover .fa-close {
-        display: block;
-      }
-    }
-  }
-}
-</style>
-
 <template>
-<div class="favorite" v-if="data != null">
-  <h3 class="com-title"><a href="javascript:;"><i class="fa fa-heart"></i>我的最爱</a></h3>
-  <div class="fav-box clearfix">
+<div class="right-bk" v-if="data != null">
+  <h3 class="com-title"><a href="javascript:;">我的最爱</a></h3>
+  <div class="item-box clearfix">
     <span v-if="info">{{info}}</span>
     <span v-else-if="data.length == 0">暫無數據</span>
     <router-link v-else v-for="(val,key) in data" :key="key" :to="`/question/${val.issue_id}`">

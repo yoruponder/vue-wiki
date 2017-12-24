@@ -1,32 +1,34 @@
 <style lang="scss">
 @import "../assets/css/baseVal.scss";
-.questionDetail-page {
-  .index-left {
-    .button {
-      width: 88px;
-      height: 24px;
-      line-height: 24px;
-      font-size: 12px;
-      margin-left: 20px;
-      &:hover {
-        color: #fff;
-      }
+.que-detail-page {
+  .button {
+    width: 74px;
+    height: 32px;
+    line-height: 32px;
+    font-size: $nfs;
+    margin-right: 10px;
+    &:hover {
+      color: #fff;
     }
   }
   .detail-box {
-    padding: 20px;
-    border: $comborder;
+    padding: 20px 30px;
+    border: 1px solid #e5e5e5;
     border-radius: 4px;
-    background: $lgray;
     h3 {
-      font-size: $mfs;
+      font-size: $bfs;
+      color: $fc1;
       margin-bottom: 10px;
+      span {
+        color: #f77d24;
+      }
     }
+    .add-fav{cursor: pointer;}
   }
   .d-b-menu {
-    margin-bottom: 25px;
+    margin: 15px 0 25px;
     font-size: $nfs;
-    color: $afc;
+    color: $fc3;
     b {
       display: inline-block;
       font-weight: normal;
@@ -34,73 +36,65 @@
     }
     .r {
       float: right;
+      color: #f77d24;
+      .fa {
+        margin-right: 5px;
+        font-size: $mfs;
+      }
     }
   }
   .d-b-cnt {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     font-size: $nfs;
-  }
-  .d-b-button {
-    text-align: right;
-    .hadClose {
-      margin-left: 20px;
-    }
-  }
-  .hr-line {
-    height: 1px;
-    background: #ddd;
-    margin: 40px 0;
+    color: $fc2;
   }
   .submit-ask {
     display: block;
     margin: 32px auto 0;
   }
   .reply-list {
-    margin: 20px 0 10px;
+    margin: 30px 0 10px;
     overflow: hidden;
     .reply-item {
-      margin-bottom: 20px;
-      border: $comborder;
+      padding: 15px 30px 25px;
+      margin-bottom: 30px;
+      border-radius: 4px;
+      border: 1px solid #e5e5e5;
       h4 {
         display: flex;
         justify-content: space-between;
-        height: 70px;
-        line-height: 70px;
-        background: #fff9f9;
-        border-bottom: $comborder;
-        padding: 0 20px;
+        height: 50px;
+        line-height: 50px;
         font-size: $nfs;
-        color: $afc;
         img {
           width: 40px;
           height: 40px;
           border-radius: 50%;
         }
-        .user {
-          margin: 0 20px 0 30px;
-        }
         .time {
-          margin: 0 0 0 20px;
+          color: $fc3;
         }
         .button {
           align-self: center;
         }
+        .delete {
+          color: $fc2;
+          cursor: pointer;
+        }
       }
       .reply-detail {
-        padding: 20px;
-        background: $lgray;
-        .d-b-button {
-          margin-top: 20px;
-        }
+        padding: 20px 0 30px;
       }
     }
   }
   .more-answer {
     font-size: $bfs;
+    color: $fc2;
     margin-bottom: 5px;
   }
   .editor-content {
     table {
+      width: 100%;
       border: 1px solid #ddd;
       td,
       th {
@@ -125,24 +119,25 @@
 </style>
 
 <template>
-<div class="questionDetail-page">
+<div class="que-detail-page">
   <wiki-head :id="issue.navigation_id" />
   <bread-crumb :data="bread"/>
   <div class="com-width clearfix">
     <div class="index-left">
       <div class="detail-box">
-        <h3>{{issue.issue_title}}</h3>
+        <h3><span v-if="issue.status == 2">【該問題已關閉】</span>{{issue.issue_title}}</h3>
         <p class="clearfix d-b-menu">
-          <span class="l">{{state ? issue.userinfo.username : '加載中...'}}<b>|</b>浏览{{issue.browse_num}}次</span>
-          <span class="r"><span @click="addFavorite">加入最爱</span><b>|</b>{{issue.issue_time}}</span>
+          <span class="l">
+            {{state ? issue.userinfo.username : '加載中...'}}&nbsp;&nbsp;&nbsp;浏览{{issue.browse_num}}次&nbsp;&nbsp;&nbsp;{{issue.issue_time}}
+          </span>
+          <span class="r"><span class="add-fav" @click="addFavorite"><i class="fa fa-heart"></i>加入最爱</span></span>
         </p>
         <div class="d-b-cnt editor-content">
           <div v-html="issue.issue_content"></div>
         </div>
         <div class="d-b-button">
-          <router-link class="button" :to="`/edit/${issue.navigation_id}/${qid}`">点我编辑</router-link>
-          <span v-if="issue.status == 2" class="hadClose">該問題已關閉</span>
-          <button v-else class="button button-orange" @click="closeIssue">关闭提问</button>
+          <router-link class="button" :to="`/edit/${issue.navigation_id}/${qid}`">编辑</router-link>
+          <button v-if="issue && issue.status != 2" class="button button-orange" @click="closeIssue">关闭提问</button>
         </div>
       </div>
       <div class="hr-line"></div>
@@ -150,16 +145,19 @@
         <li class="reply-item" v-for="(v,k) in reply" :key="k">
           <h4>
             <div>
-              <img :src="v.userinfo.photo ? v.userinfo.photo : '/static/timg.jpeg'"/>
-              <span class="user">{{v.userinfo.username}}</span>|<span class="time">回答于{{v.reply_time}}</span>
+              <img :src="v.userinfo.photo ? v.userinfo.photo : '/static/timg.jpeg'"/>&nbsp;&nbsp;&nbsp;
+              <span class="user">{{v.userinfo.username}}</span>&nbsp;&nbsp;&nbsp;
+              <span class="time">回答于{{v.reply_time}}</span>
             </div>
             <div>
               <span class="button button-orange" @click="delAnswer(v.id)">刪除回答</span>
-              <span class="button" @click="getEditAnswer(v.id)">我要編輯</span>
             </div>
           </h4>
           <div class="reply-detail">
             <div class="editor-content clearfix" v-html="v.reply_content"></div>
+          </div>
+          <div>
+            <span class="button" @click="getEditAnswer(v.id)">我要編輯</span>
           </div>
         </li>
       </ul>

@@ -135,7 +135,7 @@
             <th class="q-l-time">時間</th>
           </tr>
           <tr v-if="!issue || issue.length == 0">
-            <td colspan="3" :style="{textAlign:'center'}">暂无数据</td>
+            <td colspan="3" style="text-align:center;">暂无数据</td>
           </tr>
           <tr v-else v-for="(v,k) in issue" :key="k">
             <td class="q-l-tle">
@@ -206,7 +206,7 @@ export default {
   },
   methods: {
     getCategory() {
-      ajax.get(Api, {params:{ c: "index", a: "index", navigation_id: this.nid }}).then(res => {
+      Api.index({ c: "index", a: "index", navigation_id: this.nid }).then(res => {
         this.category = res.data.category;
       });
     },
@@ -218,7 +218,7 @@ export default {
       this.type = this.$route.query.type ? this.$route.query.type : "all";
     },
     pageChange(now) {
-      console.log(now);
+      this.currentPage = now;
     },
     keyChange() {
 

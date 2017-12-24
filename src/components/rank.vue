@@ -60,20 +60,20 @@
 </style>
 
 <template>
-  <div class="rank">
-      <h3 class="com-title">
-        <span class="fa fa-flag-checkered"></span><a href="javascript:;">冠軍排行榜</a>
-      </h3>
+  <div class="right-bk rank">
+      <h3 class="com-title"><a href="javascript:;">冠軍排行榜</a></h3>
       <ul>
         <li v-if="data.length == 0">暫無數據</li>
-        <li v-else v-for="(val, key) in data" :key="key">
+        <template v-else> 
+        <li v-if="key < 10" v-for="(val, key) in data" :key="key">
           <div>
-              <i class="flag">{{key+1}}</i>
+            <span class="number">{{key+1}}</span>
               <img :src="val.photo ? val.photo : '/static/timg.jpeg'" />
               <span>{{val.username}}</span>
           </div>
           <span class="score">{{val.score}}分</span>
         </li>
+        </template>
       </ul>
   </div>
 </template>

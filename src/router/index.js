@@ -56,6 +56,13 @@ export default new Router({
         component: import( /* webpackChunkName: "life" */ '_PAGE_/life'),
       })
     },
+    {
+      path: '/life/collection/:cat1?/:cat2?',
+      name: 'lifeCollection',
+      component: () => ({
+        component: import( /* webpackChunkName: "lifeCollection" */ '_PAGE_/lifeCollection'),
+      })
+    },
 
   ]
 })

@@ -20,6 +20,7 @@
     <hot-tag :id="id"/>
     <rank/>
     <active-user/>
+    <to-top target="window"/>
   </div>
 </template>
 
@@ -28,6 +29,7 @@ import favorite from "_COMP_/favorite"
 import hotTag from "_COMP_/hotTag"
 import rank from "_COMP_/rank"
 import activeUser from "_COMP_/activeUser"
+import toTop from "_COMP_/toTop";
 
 export default {
   name: 'rightBlock',
@@ -35,6 +37,7 @@ export default {
     favorite,
     hotTag,
     rank,
+    toTop,
     activeUser
   },
   props:['id'],

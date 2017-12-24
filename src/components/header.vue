@@ -4,12 +4,13 @@
   line-height: $comlh;
   background: #f5f5f5;
   font-size: $nfs;
-  color: $fc1;
-  text-align: right;
+  color: $fc3;
   a {
     margin-left: 20px;
+    color: $fc1
   }
 }
+
 .head-search {
   margin-top: 22px;
   img {
@@ -17,20 +18,21 @@
   }
   .srh-box {
     float: left;
-    margin: 22px 0 0 106px;
+    margin: 20px 0 0 20px;
     .srh-input {
       float: left;
-      width: 460px;
+      width: 260px;
       height: 38px;
       line-height: 38px;
       border: 2px solid #37a508;
       border-radius: 4px 0 0 4px;
     }
-    button,
-    a {
+    button, a {
       float: left;
+      width: 80px;
       height: 38px;
       line-height: 36px;
+      font-size: $mfs;
       color: #fff;
     }
     .srh-btn {
@@ -41,48 +43,62 @@
     }
   }
 }
+
 .head-nav {
-  margin-top: 20px;
-  background: #37a508;
-  ul {
-    color: #fff;
-    font-size: $mfs;
-    line-height: 36px;
-    a {
+  float: left;
+  margin: 20px 0 0 20px;
+  color: #fff;
+  font-size: $mfs;
+  line-height: 36px;
+  a {
+    display: block;
+    height: 100%;
+    color: $fc1;
+  }
+  li {
+    position: relative;
+    float: left;
+    margin-right: 35px;
+  }
+  li:hover,.active {
+    a{
+      color: $baseColor;
+    }
+    &:after{
       display: block;
-      height: 100%;
-      padding: 0 20px;
-      color: #fff;
-    }
-    li {
-      float: left;
-    }
-    li:hover,.active {
-      background: #279005;
+      content: '';
+      height: 3px;
+      width: 100%;
+      background: $baseColor;
     }
   }
+}
+.head-pic{
+  width: 100%;
+  height: 90px;
+  margin-top: 20px;
+  background: url(/static/banner.png) center top no-repeat;
 }
 </style>
 
 <template>
 <div class="wiki-hd">
-    <div class="head-info"><p class="page-cnt">您好，欢迎来到8591客服知识库</p></div>
-    <div class="page-cnt head-search clearfix">
-        <a to="/"><img src="/static/logo.png"/></a>
-        <div class="srh-box">
-            <input ref="srhInput" type="text" class="srh-input" placeholder="请输入搜索内容"/>
-            <button type="button" class="button srh-btn" >搜索</button>
-            <router-link :to="`/ask/${id}`" class="button button-orange ask-btn">我要提问</router-link>
-        </div>
+  <div class="head-info"><p class="page-cnt">您好，欢迎来到8591客服知识库</p></div>
+  <div class="page-cnt head-search clearfix">
+    <router-link to="/"><img src="/static/logo.png"/></router-link>
+    <ul class="head-nav clearfix">
+      <router-link tag="li" to="/" exact-active-class="active"><a>8591宝物交易网</a></router-link>
+      <router-link tag="li" to="/100" exact-active-class="active"><a>100室內設計</a></router-link>
+      <router-link tag="li" to="/life" exact-active-class="active"><a>客服充电站</a></router-link>
+      <router-link tag="li" to="/notification" exact-active-class="active"><a>通知事项</a></router-link>
+    </ul>
+    <div class="srh-box">
+      <input ref="srhInput" type="text" class="srh-input" placeholder="请输入搜索内容"/>
+      <button type="button" class="button srh-btn" >搜索</button>
+      <router-link :to="`/ask/${id}`" class="button button-orange ask-btn">我要提问</router-link>
     </div>
-    <div class="head-nav">
-        <ul class="page-cnt clearfix">
-            <router-link tag="li" to="/" exact-active-class="active"><a>8591宝物交易网</a></router-link>
-            <router-link tag="li" to="/100" exact-active-class="active"><a>100室內設計</a></router-link>
-            <router-link tag="li" to="/life" exact-active-class="active"><a>客服充电站</a></router-link>
-            <router-link tag="li" to="/notification" exact-active-class="active"><a>通知事项</a></router-link>
-        </ul>
-    </div>
+  </div>
+  <div class="head-pic"></div>
 </div>
 </template>
 

@@ -103,11 +103,12 @@
           <img :src="v.cover_img ? v.cover_img : `/static/img/timg.jpeg`" />
           <p>{{v.category_name}}</p>
         </router-link>
-        <!-- <ul>
-          <li>
+        <ul>
+          <li v-if="!v.issue">暫無數據</li>
+          <li v-else v-for="(v,k) in v.issue" :key="`i${k}`">
             <router-link :to="`/question/${v.id}`">{{v.issue_title}}</router-link>
           </li>
-        </ul> -->
+        </ul>
       </div>
     </template>
   </div>
@@ -125,9 +126,6 @@ export default {
     child() {
       return this.data.child;
     }
-  },
-  mounted: function() {
-    console.log(this.self,this.child)
   }
 };
 </script>

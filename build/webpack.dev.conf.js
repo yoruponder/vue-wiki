@@ -6,7 +6,6 @@ const merge = require('webpack-merge')
 const baseWebpackConfig = require('./webpack.base.conf')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
-const workboxPlugin = require('workbox-webpack-plugin')
 
 // add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
@@ -33,12 +32,10 @@ module.exports = merge(baseWebpackConfig, {
       inject: true
     }),
     new FriendlyErrorsPlugin(),
-    new workboxPlugin({
-      globDirectory: config.build.assetsRoot,
-      globPatterns: ['**/*.{html,js,css}'],
-      swDest: config.build.assetsRoot+'/sw.js',
-      clientsClaim: true,
-      skipWaiting: true,
+    new webpack.ProvidePlugin({
+      $: "jquery",
+      jQuery: "jquery",
+      "window.jQuery": "jquery"
     })
   ]
 })

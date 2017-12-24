@@ -1,9 +1,9 @@
 <template>
   <div class="life-page">
     <wiki-head :id="nid" />
-    <div class="com-width clearfix">
+    <div class="com-width clearfix" style="margin-top:25px;">
       <div class="index-left">
-        <div :style="{marginBottom:'40px'}">
+        <div style="margin-bottom:40px;">
           <life-recommend :data="recommend"/>
         </div>
         <template v-if="category.length">

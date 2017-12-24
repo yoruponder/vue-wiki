@@ -4,7 +4,7 @@
     <top-info :info="info" />
     <div class="com-width clearfix">
       <div class="index-left">
-        <hot-point :data="hot_issue"/>
+        <hot-point :data="hot_issue" :nid="nid"/>
         <question-collection :data="category" :nid="navigation_id"/>
       </div>
       <right-block :id="navigation_id" />

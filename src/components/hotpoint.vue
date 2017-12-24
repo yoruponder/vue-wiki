@@ -2,12 +2,15 @@
 @import "../assets/css/baseVal.scss";
 .hotpoint {
   ul {
-    padding: 10px;
     font-size: $nfs;
-    border-bottom: 1px solid $fc3;
     min-height: 220px;
+    margin-top: 20px;
     li {
       line-height: 28px;
+      margin-top: 5px;
+      a {
+        color: $fc2;
+      }
       * {
         vertical-align: top;
       }
@@ -17,8 +20,8 @@
       }
       span {
         display: inline-block;
-        float: right;
-        color: $fc3;
+        margin-left: 14px;
+        color: $baseColor;
       }
     }
   }
@@ -39,13 +42,12 @@
 
 <template>
 <div class="hotpoint">
-    <h3 class="com-title"><a href="javascript:;"><i className="fa fa-rocket"></i>热点问题</a></h3>
+    <h3 class="com-title"><router-link :to="`/collection/${nid}?type=hot`">热点问题</router-link></h3>
     <ul>
       <li v-if="data == null || data.length == 0">暫無數據</li>
       <li v-else v-for="(val, key) in data" :key="key" class="clearfix">
-        <i class="fa fa-angle-right"></i>
         <router-link class="que-title" :to="`/question/${val.id}`">{{val.issue_title}}</router-link>
-        <a class="que-type" v-if="val.category_info" href="javascript:;">[{{val.category_info.category_name}}]</a>
+        <router-link class="que-type" v-if="val.category_info" :to="`/collection/${nid}/${val.category_info.id}`">[{{val.category_info.category_name}}]</router-link>
         <span>{{val.reply_total?val.reply_total:0}}回答</span>
       </li>
     </ul>
@@ -55,9 +57,7 @@
 <script>
 export default {
   name: "hotPoint",
-  props: ["data"],
-  updated: function(){
-  }
+  props: ["data","nid"]
 };
 </script>
 

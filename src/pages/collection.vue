@@ -1,7 +1,3 @@
-<style lang="scss">
-@import "../assets/css/baseVal.scss";
-</style>
-
 <template>
 <div class="collection-page">
     <wiki-head :id="navigation_id" />
@@ -45,10 +41,10 @@ export default {
   methods: {
     fromLink() {
       switch (this.navigation_id) {
-        case "1":
-          return { name: "8591寶物交易網", link: "/collection/1" };
-        case "2":
-          return { name: "100室內設計", link: "/collection/2" };
+        case "8591":
+          return { name: "8591寶物交易網", link: "/collection/8591" };
+        case "100":
+          return { name: "100室內設計", link: "/collection/100" };
         case "3":
           return { name: "客服充電站", link: "/life" };
         case "4":
