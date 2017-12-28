@@ -1,5 +1,6 @@
 <style lang="scss">
 @import "../assets/css/baseVal.scss";
+@import "../assets/css/questionList.scss";
 .typeCollection {
   border: $comborder;
   border-radius: 4px;
@@ -28,79 +29,7 @@
     }
   }
 }
-.questionList {
-  .que-nav {
-    font-size: $mfs;
-    color: $fc2;
-    border-bottom: $comborder;
-    a,
-    span {
-      display: inline-block;
-      height: $comlh;
-      line-height: $comlh;
-      margin-right: 40px;
-      cursor: pointer;
-      padding: 0 20px;
-    }
-    .now,
-    span:hover {
-      color: $baseColor;
-      border-bottom: 2px solid $baseColor;
-    }
-  }
-  .wiki-pagination {
-    margin-top: 30px;
-  }
-}
-.que-list-table {
-    .q-l-tle {
-        width: 73%;
-    }
-    .q-l-view {
-        width: 7%;
-        text-align: center;
-    }
-    .q-l-time {
-        width: 20%;
-        text-align: right;
-    }
-    th.q-l-time {
-        text-align: center;
-    }
-    table {
-        font-size: $nfs;
-        text-align: left;
-        width: 100%;
-        margin: 20px 0;
-        tr {
-            border-bottom: $comborder;
-        }
-        tr:nth-child(odd) {
-            background: $lgray;
-        }
-        tr:hover {
-            background: $lgray;
-        }
-        tr:first-child,
-        tr:first-child:hover {
-            background: #fff;
-        }
-        th,
-        td {
-            line-height: 40px;
-            font-size: $mfs;
-            color: $fc2;
-        }
-        td {
-            font-size: $nfs;
-            color: $fc3;
-            a span {
-                color: $fc3;
-                margin-left: 5px;
-            }
-        }
-    }
-}
+
 </style>
 
 <template>
@@ -148,7 +77,7 @@
             <td class="q-l-time">{{v.issue_time}}</td>
           </tr>
         </table>
-        <pagination :total="pageNum" :current="currentPage" @changePage="pageChange"/>
+        <pagination :total="pageNum" :now="currentPage"/>
       </div>
     </div>
   </div>
@@ -181,13 +110,14 @@ export default {
     allQuestionCls: function() {
       return this.type == "all" ? "now" : "";
     },
-    pageNum: function () {
+    pageNum: function() {
       return Math.ceil(this.count / this.pageSize);
     },
     subCat: function() {
       let catArray = [];
       let catData = this.category;
-      if (this.cat1) { //有一級分類
+      if (this.cat1) {
+        //有一級分類
         for (let i in catData) {
           if (this.cat1 == catData[i].self.id) {
             this.bigName = catData[i].self.category_name;
@@ -206,7 +136,11 @@ export default {
   },
   methods: {
     getCategory() {
-      Api.index({ c: "index", a: "index", navigation_id: this.nid }).then(res => {
+      Api.index({
+        c: "index",
+        a: "index",
+        navigation_id: this.nid
+      }).then(res => {
         this.category = res.data.category;
       });
     },
@@ -217,19 +151,15 @@ export default {
     typeChange() {
       this.type = this.$route.query.type ? this.$route.query.type : "all";
     },
-    pageChange(now) {
-      this.currentPage = now;
+    pageChange() {
+      this.currentPage = this.$route.query.page ? this.$route.query.page : 1;
     },
-    keyChange() {
-
-    },
-    tagIdChange() {
-
-    },
+    keyChange() {},
+    tagIdChange() {},
     getQuestion() {
       let data = {
-        c: 'index',
-        a: 'issue',
+        c: "index",
+        a: "issue",
         type: this.type,
         page: this.currentPage,
         pagesize: this.pageSize,
@@ -254,6 +184,7 @@ export default {
     $route: function() {
       this.catChange();
       this.typeChange();
+      this.pageChange();
 
       this.getQuestion();
     }

@@ -43,10 +43,9 @@
     }
   }
 }
-
 .head-nav {
   float: left;
-  margin: 20px 0 0 20px;
+  margin: 20px 0 0 60px;
   color: #fff;
   font-size: $mfs;
   line-height: 36px;
@@ -83,19 +82,27 @@
 
 <template>
 <div class="wiki-hd">
-  <div class="head-info"><p class="page-cnt">您好，欢迎来到8591客服知识库</p></div>
+  <div class="head-info">
+    <p class="page-cnt">您好，欢迎来到8591客服知识库</p>
+  </div>
   <div class="page-cnt head-search clearfix">
     <router-link to="/"><img src="/static/logo.png"/></router-link>
     <ul class="head-nav clearfix">
-      <router-link tag="li" to="/" exact-active-class="active"><a>8591宝物交易网</a></router-link>
-      <router-link tag="li" to="/100" exact-active-class="active"><a>100室內設計</a></router-link>
-      <router-link tag="li" to="/life" exact-active-class="active"><a>客服充电站</a></router-link>
-      <router-link tag="li" to="/notification" exact-active-class="active"><a>通知事项</a></router-link>
+      <router-link tag="li" to="/" :class="id == 8591 ? 'active': ''"><a>8591宝物交易网</a></router-link>
+      <router-link tag="li" to="/100" :class="id == 100 ? 'active': ''"><a>100室內設計</a></router-link>
+      <router-link tag="li" to="/life" :class="id == 3 ? 'active': ''"><a>客服充电站</a></router-link>
+      <router-link tag="li" to="/notification" :class="id == 4 ? 'active': ''"><a>通知事项</a></router-link>
     </ul>
     <div class="srh-box">
       <input ref="srhInput" type="text" class="srh-input" placeholder="请输入搜索内容"/>
-      <button type="button" class="button srh-btn" >搜索</button>
-      <router-link :to="`/ask/${id}`" class="button button-orange ask-btn">我要提问</router-link>
+      <button type="button" class="button srh-btn">搜索</button>
+      <router-link :to="id == 4 ? '/notification/publish/' : `/ask/${id}`" class="button button-orange ask-btn">
+      {{
+        id == 8591 || id == 100
+        ? '提問'
+        : '發佈'
+      }}
+      </router-link>
     </div>
   </div>
   <div class="head-pic"></div>
@@ -105,9 +112,6 @@
 <script>
 export default {
   name: "wikiHead",
-  props:['id'],
-  data() {
-    return {};
-  }
+  props:['id']
 };
 </script>

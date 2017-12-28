@@ -1,0 +1,75 @@
+@import "./baseVal.scss";
+
+.questionList {
+  .que-nav {
+    font-size: $mfs;
+    color: $fc2;
+    border-bottom: $comborder;
+    a,
+    span {
+      display: inline-block;
+      height: $comlh;
+      line-height: $comlh;
+      margin-right: 40px;
+      cursor: pointer;
+      padding: 0 20px;
+    }
+    .now,
+    span:hover {
+      color: $baseColor;
+      border-bottom: 2px solid $baseColor;
+    }
+  }
+  .wiki-pagination {
+    margin-top: 30px;
+  }
+}
+.que-list-table {
+  .q-l-tle {
+    width: 73%;
+  }
+  .q-l-view {
+    width: 7%;
+    text-align: center;
+  }
+  .q-l-time {
+    width: 20%;
+    text-align: right;
+  }
+  th.q-l-time {
+    text-align: center;
+  }
+  table {
+    font-size: $nfs;
+    text-align: left;
+    width: 100%;
+    margin: 20px 0;
+    tr {
+      border-bottom: $comborder;
+    }
+    tr:nth-child(odd) {
+      background: $lgray;
+    }
+    tr:hover {
+      background: $lgray;
+    }
+    tr:first-child,
+    tr:first-child:hover {
+      background: #fff;
+    }
+    th,
+    td {
+      line-height: 40px;
+      font-size: $mfs;
+      color: $fc2;
+    }
+    td {
+      font-size: $nfs;
+      color: $fc3;
+      a span {
+        color: $fc3;
+        margin-left: 5px;
+      }
+    }
+  }
+}

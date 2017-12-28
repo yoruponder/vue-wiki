@@ -1,14 +1,21 @@
 import axios from 'axios';
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
 
 axios.defaults.timeout = 5000;
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = '/api';
 
+NProgress.configure({ minimum: 0.2 });
+NProgress.configure({ easing: 'ease', speed: 500 });
+NProgress.configure({ showSpinner: false });
 
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
     // Do something before request is sent
+    NProgress.start();
+
     return config;
 }, function (error) {
     // Do something with request error
@@ -18,6 +25,8 @@ axios.interceptors.request.use(function (config) {
 // Add a response interceptor
 axios.interceptors.response.use(function (response) {
     // Do something with response data
+    NProgress.done();
+
     return response.data;
 }, function (error) {
     // Do something with response error

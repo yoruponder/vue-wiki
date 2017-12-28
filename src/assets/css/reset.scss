@@ -269,7 +269,6 @@ input:focus, textarea:focus {
     width: 100%;
   }
 }
-
 .com-title {
   color: $fc1;
   font-size: 24px;
@@ -282,4 +281,8 @@ input:focus, textarea:focus {
     font-size: 20px;
     margin-right: 10px;
   }
+}
+#nprogress .bar {
+    background: $baseColor!important;
+    height: 2px!important;
 }

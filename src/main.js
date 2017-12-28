@@ -3,13 +3,11 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import store from './store'
-
+import { mapActions } from "vuex";
 import '_CFG_/global'
 import '_CSS_/reset.scss';
 
 Vue.config.productionTip = false
-
 /* eslint-disable no-new */
 function vueInit(){
   new Vue({
@@ -32,5 +30,7 @@ function vueInit(){
   //     });
   //   });
   // }
-  vueInit();
+  store.dispatch('user/login').then(()=>{
+    vueInit();
+  })
 })();

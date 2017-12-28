@@ -2,7 +2,7 @@
 const namespaced = true
 
 const state = {
-    styleClass: 'normal',
+    styleClass: 'noclass',
     closeBtn: 1,
     show: 0,
     style: { width: '500px', height: '240px', marginLeft: '-250px', marginTop: '-120px' },
@@ -15,7 +15,10 @@ const state = {
         },
         {
             txt: '確定',
-            type: 'ok'
+            type: 'ok',
+            fn: function() {
+                console.log('ok');
+            }
         }
     ]
 }

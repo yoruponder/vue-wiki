@@ -46,41 +46,41 @@
 <template>
   <div v-if="total > 1" class="wiki-pagination">
     
-    <router-link :to="{query:{ page: prevPage }}" :class="prevCls" @click.native="goPrev"><i class="fa fa-angle-left"></i></router-link>
+    <router-link :to="queryPage(prevPage)" :class="prevCls" @click.native="goPrev"><i class="fa fa-angle-left"></i></router-link>
     <template v-if="total <= 5">
-      <router-link v-for="i in total" :key="i" :to="{query:{ page: i }}" :class="[now == i ? 'current' : '']" @click.native="clickPage(i)">{{i}}</router-link>
+      <router-link v-for="i in total" :key="i" :to="queryPage(i)" :class="[now == i ? 'current' : '']" @click.native="clickPage(i)">{{i}}</router-link>
     </template>
     <template v-else>
       
       <template v-if="now < 5">
-        <router-link v-for="i in 5" :key="i" :to="{query:{ page: i }}" :class="[now == i ? 'current' : '']" @click.native="clickPage(i)">{{i}}</router-link>
+        <router-link v-for="i in 5" :key="i" :to="queryPage(i)" :class="[now == i ? 'current' : '']" @click.native="clickPage(i)">{{i}}</router-link>
         <em>···</em>
-        <router-link :to="{query:{ page: total }}" @click.native="clickPage(total)">{{total}}</router-link>
+        <router-link :to="queryPage(total)" @click.native="clickPage(total)">{{total}}</router-link>
       </template>
 
       <template v-else-if="now >= 5 && now <= total - 4">
-        <router-link  :to="{query:{ page: 1 }}" @click.native="clickPage(1)">1</router-link>
+        <router-link  :to="queryPage(1)" @click.native="clickPage(1)">1</router-link>
         <em>···</em>
-        <router-link v-for="i in 5" :key="now + (i-3)" :to="{query:{ page: now + (i-3) }}" :class="[now == now + (i-3) ? 'current' : '']" @click.native="clickPage(now + (i-3))">{{now + (i-3)}}</router-link>
+        <router-link v-for="i in 5" :key="now + (i-3)" :to="queryPage(now + (i-3))" :class="[now == now + (i-3) ? 'current' : '']" @click.native="clickPage(now + (i-3))">{{now + (i-3)}}</router-link>
         <em>···</em>
-        <router-link :to="{query:{ page: total }}" @click.native="clickPage(total)">{{total}}</router-link>        
+        <router-link :to="queryPage(total)" @click.native="clickPage(total)">{{total}}</router-link>        
       </template>
 
       <template v-else-if="now > total - 4">
-        <router-link  :to="{query:{ page: 1 }}" @click.native="clickPage(1)">1</router-link>
+        <router-link  :to="queryPage(1)" @click.native="clickPage(1)">1</router-link>
         <em>···</em>
-        <router-link v-for="i in 5" :key="total-(5-i)" :to="{query:{ page: total-(5-i) }}" :class="[now == total-(5-i) ? 'current' : '']" @click.native="clickPage(total-(5-i))">{{total-(5-i)}}</router-link>
+        <router-link v-for="i in 5" :key="total-(5-i)" :to="queryPage(total-(5-i))" :class="[now == total-(5-i) ? 'current' : '']" @click.native="clickPage(total-(5-i))">{{total-(5-i)}}</router-link>
       </template>
 
     </template>
-    <router-link :to="{query:{ page: nextPage }}" :class="nextCls" @click.native="goNext"><i class="fa fa-angle-right"></i></router-link>
+    <router-link :to="queryPage(nextPage)" :class="nextCls" @click.native="goNext"><i class="fa fa-angle-right"></i></router-link>
   </div>
 </template>
 
 <script>
 export default {
   name: 'pagination',
-  props:['total','current'],
+  props:['total','now'],
   computed:{
     prevCls: function () {
       return this.now == 1 ? 'disabled' : '';
@@ -95,26 +95,26 @@ export default {
       return this.now < this.total ? this.now + 1 : this.total;
     }
   },
-  data() {
-    return {
-      now: this.current
-    };
-  },
   methods: {
     changePage: function (now) {
       this.$emit('changePage',now);
     },
     goPrev: function () {
-      this.now = this.prevPage;
+      //this.now = this.prevPage;
       this.changePage(this.now);
     },
     goNext: function () {
-      this.now = this.nextPage;
+      //this.now = this.nextPage;
       this.changePage(this.now);
     },
     clickPage: function (i) {
-      this.now = i;
-      this.changePage(this.now);
+      //this.now = i;
+      //this.changePage(this.now);
+    },
+    queryPage: function(page) {
+      let data = {};
+      data = Object.assign({},this.$route.query,{page: page});
+      return ({query:data});
     }
   }
 }

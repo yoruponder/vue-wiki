@@ -1,13 +1,13 @@
 <template>
   <div class="idx-page">
-    <wiki-head :id="navigation_id" />
+    <wiki-head :id="nid" />
     <top-info :info="info" />
     <div class="com-width clearfix">
       <div class="index-left">
         <hot-point :data="hot_issue" :nid="nid"/>
-        <question-collection :data="category" :nid="navigation_id"/>
+        <question-collection :data="category" :nid="nid"/>
       </div>
-      <right-block :id="navigation_id" />
+      <right-block :id="nid" />
     </div>
     <wiki-footer/>
   </div>
@@ -41,8 +41,7 @@ export default {
         online: "N/A"
       },
       hot_issue: [],
-      category: [],
-      navigation_id: this.nid
+      category: []
     };
   },
   methods: {

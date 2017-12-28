@@ -15,6 +15,9 @@
       font-size: $mfs;
       margin-left: 8px;
     }
+    &:first-child{
+      margin-left: 0;
+    }
   }
   .now{
     color: $baseColor;

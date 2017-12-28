@@ -1,7 +1,7 @@
 <style lang="scss">
 @import "../assets/css/baseVal.scss";
 .que-detail-page {
-  .button {
+  .index-left .button {
     width: 74px;
     height: 32px;
     line-height: 32px;

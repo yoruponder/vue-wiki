@@ -34,7 +34,7 @@ export default {
     },
     delFavorite(id) {
       if (confirm("確認要刪除該條記錄嗎")) {
-        ajax.post(Api,{params:{c:'user',a:'unCollection',id:id}}).then(res => {
+        Api.delFavorite({c:'user',a:'unCollection',id:id}).then(res => {
           if (res.status == 1) {
             this.getFavorite();
           } else {

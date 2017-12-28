@@ -63,6 +63,40 @@ export default new Router({
         component: import( /* webpackChunkName: "lifeCollection" */ '_PAGE_/lifeCollection'),
       })
     },
-
+    {
+      path: '/notification/publish',
+      name: 'notificationPublish',
+      component: () => ({
+        component: import( /* webpackChunkName: "notificationPublish" */ '_PAGE_/notificationPublish'),
+      })
+    },
+    {
+      path: '/notification/detail/:id',
+      name: 'notificationDetail',
+      component: () => ({
+        component: import( /* webpackChunkName: "notificationDetail" */ '_PAGE_/notificationDetail'),
+      })
+    },
+    {
+      path: '/notification/:id?',
+      name: 'notification',
+      component: () => ({
+        component: import( /* webpackChunkName: "notification" */ '_PAGE_/notification'),
+      })
+    },
+    {
+      path: '/uc/:type?/:id?',
+      name: 'usercenter',
+      component: () => ({
+        component: import( /* webpackChunkName: "usercenter" */ '_PAGE_/usercenter'),
+      }),
+      beforeEnter: (to, from, next) => {
+        if(!store.state.user.uid){
+          next('/');
+        }else{
+          next();
+        }
+      }
+    }
   ]
 })
