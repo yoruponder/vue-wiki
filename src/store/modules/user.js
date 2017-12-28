@@ -24,8 +24,8 @@ const actions = {
                         english_name: res.data.user.english_name ? res.data.user.english_name : '',
                     });
                     setInterval(() => { Api.pingUser(); }, 60000);
-                    resolve();
                 }
+                resolve();                
             });
         });
     },

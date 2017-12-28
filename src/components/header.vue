@@ -83,7 +83,11 @@
 <template>
 <div class="wiki-hd">
   <div class="head-info">
-    <p class="page-cnt">您好，欢迎来到8591客服知识库</p>
+    <p class="page-cnt">
+      您好，欢迎来到8591客服知识库
+      <router-link v-if="user.uid" to="/uc">[{{user.username}}]</router-link>
+      <a v-else :href="`https://${url}/admin.php?returnUrl=https://${hostname}`">[请登入]</a>
+    </p>
   </div>
   <div class="page-cnt head-search clearfix">
     <router-link to="/"><img src="/static/logo.png"/></router-link>
@@ -94,8 +98,8 @@
       <router-link tag="li" to="/notification" :class="id == 4 ? 'active': ''"><a>通知事项</a></router-link>
     </ul>
     <div class="srh-box">
-      <input ref="srhInput" type="text" class="srh-input" placeholder="请输入搜索内容"/>
-      <button type="button" class="button srh-btn">搜索</button>
+      <input ref="srhInput" type="text" class="srh-input" placeholder="请输入搜索内容" v-model="keyword"/>
+      <button type="button" class="button srh-btn" @click="search">搜索</button>
       <router-link :to="id == 4 ? '/notification/publish/' : `/ask/${id}`" class="button button-orange ask-btn">
       {{
         id == 8591 || id == 100
@@ -110,8 +114,30 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "wikiHead",
-  props:['id']
+  props:['id'],
+  data() {
+    return {
+      hostname: window.location.hostname,
+      url: window.location.hostname.replace('wiki','www'),
+      keyword: this.$route.query.key ? this.$route.query.key : '' 
+    }
+  },
+  computed: {
+    ...mapState([
+      'user'
+    ])
+  },
+  methods: {
+    search() {
+      if(this.keyword){
+        this.$router.push(`/collection/${this.id}?key=${this.keyword}`);
+      }else{
+        this.$router.push(`/collection/${this.id}`);        
+      }
+    }
+  }
 };
 </script>

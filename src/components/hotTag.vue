@@ -4,7 +4,7 @@
     <h3 class="com-title">热门标签</h3>
     <div class="hotTag-box item-box clearfix">
       <p v-if="data.length == 0">無數據</p>      
-      <a v-else v-for="(val,key) in data" href="javascript:;" :key="key">{{val.content}}</a>
+      <router-link v-else v-for="(val,key) in data" :to="`/collection/${id}?type=tag&tagid=${val.id}`" :key="key">{{val.content}}</router-link>
     </div>
   </div>
 </template>

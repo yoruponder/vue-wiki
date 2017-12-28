@@ -24,6 +24,7 @@
     height: 24px;
     line-height: 24px;
     text-align: center;
+    vertical-align: middle;
   }
   .que-list-table table td.n-time {
     text-align: center;

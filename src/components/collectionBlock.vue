@@ -34,7 +34,7 @@
 
 <template>
   <div class="collection-block">
-    <div class="typeCollection">
+    <div class="typeCollection" v-if="type!='tag' && !key">
       <h3><i class="fa fa-map"></i>{{bigName}}</h3>
       <ul class="type-col-box">
         <li v-if="subCat.length == 0">
@@ -49,8 +49,8 @@
 
     <div class="questionList">
       <div class="que-nav">
-        <span v-if="type == 'tag'">标签筛选结果</span>
-        <span v-if="key">搜索结果</span>
+        <span v-if="type == 'tag'" class="now">标签筛选结果</span>
+        <span v-if="key" class="now">搜索结果</span>
         <router-link :to="{query:{type:'all'}}" :class="allQuestionCls">全部問題</router-link>
         <router-link :to="{query:{type:'hot'}}" active-class="now" exact>熱點問題</router-link>
         <router-link :to="{query:{type:'my'}}" active-class="now" exact>我的最愛</router-link>
@@ -108,7 +108,7 @@ export default {
   },
   computed: {
     allQuestionCls: function() {
-      return this.type == "all" ? "now" : "";
+      return this.type == "all" && !this.key ? "now" : "";
     },
     pageNum: function() {
       return Math.ceil(this.count / this.pageSize);
@@ -154,8 +154,12 @@ export default {
     pageChange() {
       this.currentPage = this.$route.query.page ? this.$route.query.page : 1;
     },
-    keyChange() {},
-    tagIdChange() {},
+    keyChange() {
+      this.key = this.$route.query.key ? this.$route.query.key : "";     
+    },
+    tagIdChange() {
+      this.tagid = this.$route.query.tagid ? this.$route.query.tagid : "";
+    },
     getQuestion() {
       let data = {
         c: "index",
@@ -185,7 +189,8 @@ export default {
       this.catChange();
       this.typeChange();
       this.pageChange();
-
+      this.keyChange();
+      this.tagIdChange();
       this.getQuestion();
     }
   }
