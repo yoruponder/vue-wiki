@@ -97,6 +97,69 @@ export default new Router({
           next();
         }
       }
-    }
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: () => ({
+        component: import( /* webpackChunkName: "admin" */ '_PAGE_/admin'),
+      }),
+      children: [
+        {
+          path: 'score',
+          component: () => ({
+            component: import( /* webpackChunkName: "score" */ '_PAGE_/admin/score'),
+          })
+        },
+        {
+          path: 'nav',
+          component: () => ({
+            component: import( /* webpackChunkName: "admin-nav" */ '_PAGE_/admin/nav'),
+          })
+        },
+        {
+          path: 'question',
+          component: () => ({
+            component: import( /* webpackChunkName: "admin-nav" */ '_PAGE_/admin/question'),
+          })
+        },
+        {
+          path: 'answer',
+          component: () => ({
+            component: import( /* webpackChunkName: "admin-nav" */ '_PAGE_/admin/answer'),
+          })
+        },
+        {
+          path: 'category',
+          component: () => ({
+            component: import( /* webpackChunkName: "admin-nav" */ '_PAGE_/admin/category'),
+          })
+        },
+        {
+          path: 'tag',
+          component: () => ({
+            component: import( /* webpackChunkName: "admin-nav" */ '_PAGE_/admin/tag'),
+          })
+        },
+        {
+          path: 'notice',
+          component: () => ({
+            component: import( /* webpackChunkName: "admin-nav" */ '_PAGE_/admin/notice'),
+          })
+        }
+      ],
+      beforeEnter: (to, from, next) => {
+        if(to.name == 'admin'){
+          next('/admin/score');
+        }else{
+          next();
+        }
+        //if (!store.state.user.super) {
+          //next('/');
+        //} else {
+          //next();
+        //}
+      }
+    },
   ]
 })

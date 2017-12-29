@@ -1,0 +1,60 @@
+@import './baseVal.scss';
+@import './questionList.scss';
+
+.admin-cnt{
+    .srh-p{
+        height: 40px;
+        line-height: 40px;
+        background: #F0F8FF;
+        color: $fc1;
+        font-size: $mfs;
+        margin: 40px 0;
+        padding-left: 30px;
+    }
+    .srh-area{
+        display: flex;
+        display: -webkit-flex;
+        .line,.item-wp{
+            display: flex;
+            display: -webkit-flex;
+            line-height: 36px;
+            margin-bottom: 20px;
+            
+        }
+        .item-wp{
+            margin-right: 20px;
+            span{
+                display: inline-block;
+                min-width: 78px;
+                text-align: right;
+            }
+        }
+        button{
+            height: 36px;
+        }
+        input,[type="date"]{
+            display: block;
+            width: 260px;
+            height: 36px;
+            line-height: 36px;
+            border: $comborder;
+            border-radius: 4px;
+            padding: 4px;
+            color: #333;
+            font-size: $nfs;
+        }
+        [type="date"]{
+            width: 260px;
+        }
+        select{
+            min-width: 160px;
+            height: 36px;
+        }
+    }
+    .que-list-table{
+        th,td{
+            text-align: center;
+        }
+    }
+    
+}

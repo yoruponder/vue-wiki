@@ -11,7 +11,7 @@ if (window.location.hostname.indexOf('dev') > -1){
 } else {
     requestUrl = protocol + 'localhost:5050/api';
 }
-
+//前台接口
 Api.index = data => ajax.get(requestUrl, { params: data });
 Api.favorite = data => ajax.get(requestUrl, { params: data });
 Api.delFavorite = data => ajax.get(requestUrl, { params: data });
@@ -45,5 +45,35 @@ Api.myReply = () => ajax.get(requestUrl, { params: { c: 'user', a: 'myReply' } }
 Api.myIssueClose = () => ajax.get(requestUrl, { params: { c: 'user', a: 'myIssueClose' } });
 Api.myIssueNoAnswer = () => ajax.get(requestUrl, { params: { c: 'user', a: 'myIssueNoAnswer' } });
 
+//後台接口
+Api.admin = {
+    users: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'userlist', ...data }}),
+    editUser: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'editUser', ...data } }),
+    navigation: () => ajax.get(requestUrl, { params: { c: 'admin', a: 'navigation', } }),
+    issue: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'allIssue', ...data } }),
+    recommend: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'recommendedIssue', ...data } }),
+    unrecommend: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'unrecommendedIssue', ...data } }),
+    moveIssue: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'moveIssue', ...data } }),
+    removeIssue: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'removeIssue', ...data } }),
+    replyIssue: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'replyIssue', ...data } }),
+    removeReply: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'removeReply', ...data } }),
+    category: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'category', ...data } }),
+    removeCateGoryOne: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'removeCateGoryOne', ...data } }),
+    removeCategoryTwo: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'removeCategoryTwo', ...data } }),
+    addCategoryOne: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'addCategoryOne', ...data } }),
+    addCategoryTwo: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'addCategoryTwo', ...data } }),
+    editCategoryName: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'editCategoryName', ...data } }),
+    fetchAllTag: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'tag', ...data } }),
+    removeTag: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'removeTag', ...data } }),
+    addTag: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'addTag', ...data } }),
+    editTags: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'editTags', ...data } }),
+    notification: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'notification', ...data } }),
+    notiCategory: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'notiCategory', ...data } }),
+    addNotice: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'addNotificationCategory', ...data } }),
+    moveTags: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'moveTags', ...data } }),
+    issueTag: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'issueTag', ...data } }),
+    removeNotice: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'removeNotice', ...data } }),
+    moveNotice: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'moveNotice', ...data } })
+};
 
 export { Api, requestUrl};

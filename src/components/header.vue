@@ -1,15 +1,6 @@
 <style lang="scss">
 @import "../assets/css/baseVal.scss";
-.head-info {
-  line-height: $comlh;
-  background: #f5f5f5;
-  font-size: $nfs;
-  color: $fc3;
-  a {
-    margin-left: 20px;
-    color: $fc1
-  }
-}
+@import "../assets/css/head.scss";
 
 .head-search {
   margin-top: 22px;
