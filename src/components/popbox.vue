@@ -57,7 +57,11 @@
 <template>
   <div v-if="popbox.show" :class="`popbox ${popbox.styleClass ? popbox.styleClass : ''}`" :style="popbox.style">
     <h3>{{popbox.tle}} <span v-if="popbox.closeBtn" @click="doclose">關閉</span></h3>
-    <div class="pb-cnt" v-html="popbox.cnt"></div>
+    <div class="pb-cnt" v-if="popbox.type == 'slot'">
+      <slot name="default" v-if="popbox.slotName == 'default'">彈框內容</slot>
+      <slot v-for="(v,k) in slotArr" :name="v" v-if="popbox.slotName == v"></slot>
+    </div>
+    <div v-else class="pb-cnt" v-html="popbox.cnt"></div>
     <div class="pb-btn-area">
       <button v-for="(v,k) in popbox.btn" :key="k" :class="v.type == 'ok' ? 'pb-btn-ok' : 'pb-btn-cle'" @click="customFn(v.fn)">{{v.txt}}</button>
     </div>
@@ -70,6 +74,7 @@ import { mapActions } from "vuex";
 
 export default {
   name: 'popbox',
+  props:['slotArr'],
   computed:{
     ...mapState([
       'popbox'

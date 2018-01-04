@@ -36,7 +36,7 @@
       <router-link tag="li" to="/admin/nav" active-class="on">導航管理</router-link>
       <router-link tag="li" to="/admin/question" active-class="on">問題管理</router-link>
       <router-link tag="li" to="/admin/answer" active-class="on">回答管理</router-link>
-      <router-link tag="li" to="/admin/type" active-class="on">分類管理</router-link>
+      <router-link tag="li" to="/admin/category" active-class="on">分類管理</router-link>
       <router-link tag="li" to="/admin/tag" active-class="on">標籤管理</router-link>
       <router-link tag="li" to="/admin/notice" active-class="on">通知管理</router-link>
     </ul>

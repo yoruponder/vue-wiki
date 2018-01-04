@@ -108,7 +108,7 @@ export default new Router({
         {
           path: 'score',
           component: () => ({
-            component: import( /* webpackChunkName: "score" */ '_PAGE_/admin/score'),
+            component: import( /* webpackChunkName: "admin-sco" */ '_PAGE_/admin/score'),
           })
         },
         {
@@ -118,33 +118,33 @@ export default new Router({
           })
         },
         {
-          path: 'question',
+          path: 'question/:nid?',
           component: () => ({
-            component: import( /* webpackChunkName: "admin-nav" */ '_PAGE_/admin/question'),
+            component: import( /* webpackChunkName: "admin-que" */ '_PAGE_/admin/question'),
           })
         },
         {
-          path: 'answer',
+          path: 'answer/:nid?',
           component: () => ({
-            component: import( /* webpackChunkName: "admin-nav" */ '_PAGE_/admin/answer'),
+            component: import( /* webpackChunkName: "admin-ans" */ '_PAGE_/admin/answer'),
           })
         },
         {
-          path: 'category',
+          path: 'category/:nid?',
           component: () => ({
-            component: import( /* webpackChunkName: "admin-nav" */ '_PAGE_/admin/category'),
+            component: import( /* webpackChunkName: "admin-cat" */ '_PAGE_/admin/category'),
           })
         },
         {
-          path: 'tag',
+          path: 'tag/:nid?',
           component: () => ({
-            component: import( /* webpackChunkName: "admin-nav" */ '_PAGE_/admin/tag'),
+            component: import( /* webpackChunkName: "admin-tag" */ '_PAGE_/admin/tag'),
           })
         },
         {
           path: 'notice',
           component: () => ({
-            component: import( /* webpackChunkName: "admin-nav" */ '_PAGE_/admin/notice'),
+            component: import( /* webpackChunkName: "admin-not" */ '_PAGE_/admin/notice'),
           })
         }
       ],

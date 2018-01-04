@@ -6,7 +6,9 @@ const state = {
     closeBtn: 1,
     show: 0,
     style: { width: '500px', height: '240px', marginLeft: '-250px', marginTop: '-120px' },
+    type: 'slot', // or html
     tle: '彈框標題',
+    slotName: 'default',
     cnt: '彈框內容',
     btn: [
         {

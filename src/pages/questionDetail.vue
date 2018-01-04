@@ -173,7 +173,13 @@
     </div>
     <right-block v-if="state" :id="issue.navigation_id" />
   </div>
-  <popbox/>
+  <popbox :slotArr="['addFav']">
+    <div slot="addFav">
+      <p style="margin:30px 0 10px;font-size:16px;">将该问题加入我的最爱。</p>
+      <input v-model="favName" type="text" placeholder="请输入名称" autofocus="autofocus"/>
+    </div>
+
+  </popbox>
   <shadow-component/>
   <wiki-footer/>
 </div>
@@ -209,7 +215,8 @@ export default {
       issue: {},
       reply: [],
       editId: "",
-      editor: ""
+      editor: "",
+      favName: '',
     };
   },
   computed: {
@@ -382,9 +389,9 @@ export default {
         fn: () => this.closePopbox()
       });
       this.pbshow({
+        type: 'slot',
         tle: "加入我的最愛",
-        cnt: `<p style="margin:30px 0 10px;font-size:16px;">将该问题加入我的最爱。</p>
-        <input class="j-fav-name" type="text" placeholder="请输入名称" autofocus="autofocus"/>`,
+        slotName: 'addFav',
         btn: [
           {
             txt: "確定",
@@ -401,7 +408,7 @@ export default {
         c: "user",
         a: "collection",
         issue_id: this.qid,
-        collection_name: document.getElementsByClassName("j-fav-name")[0].value,
+        collection_name: this.favName,
         navigation_id: navigation_id
       };
 
