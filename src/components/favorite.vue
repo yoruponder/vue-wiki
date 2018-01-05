@@ -46,6 +46,11 @@ export default {
   },
   beforeMount: function() {
     this.getFavorite();
-  }
+  },
+  watch: {
+    id: function() {
+      this.getFavorite();
+    }
+  },
 };
 </script>

@@ -29,6 +29,11 @@ export default {
   },
   beforeMount: function () {
     this.getTag();
-  }
+  },
+  watch: {
+    id: function() {
+      this.getTag();
+    }
+  },
 };
 </script>

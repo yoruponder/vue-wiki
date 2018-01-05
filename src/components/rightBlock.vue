@@ -40,10 +40,7 @@ export default {
     toTop,
     activeUser
   },
-  props:['id'],
-  mounted: function(){
-    //console.log(this.id)
-  }
+  props:['id']
 }
 </script>
 
