@@ -4,9 +4,9 @@ let protocol = window.location.protocol + '//';
 let requestUrl = '';
 let Api = {};
 
-if (window.location.hostname.indexOf('dev') > -1){
+if (window.location.hostname.indexOf('dev') > -1) {
     requestUrl = protocol + 'wiki.dev.8591.com.tw:5050/api';
-} else if(window.location.hostname.indexOf('wiki.8591') > -1) {
+} else if (window.location.hostname.indexOf('wiki.8591') > -1) {
     requestUrl = protocol + 'wiki.8591.com.tw/api';
 } else {
     requestUrl = protocol + 'localhost:5050/api';
@@ -47,7 +47,7 @@ Api.myIssueNoAnswer = () => ajax.get(requestUrl, { params: { c: 'user', a: 'myIs
 
 //後台接口
 Api.admin = {
-    users: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'userlist', ...data }}),
+    users: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'userlist', ...data } }),
     editUser: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'editUser', ...data } }),
     navigation: () => ajax.get(requestUrl, { params: { c: 'admin', a: 'navigation', } }),
     issues: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'allIssue', ...data } }),
@@ -73,7 +73,7 @@ Api.admin = {
     moveTags: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'moveTags', ...data } }),
     issueTag: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'issueTag', ...data } }),
     removeNotice: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'removeNotice', ...data } }),
-    moveNotice: data => ajax.get(requestUrl, { params: { c: 'admin', a: 'moveNotice', ...data } })
+    moveNotice: data => ajax.get(requestUrl, { params: { c: 'admin', a: "moveNotification", ...data } })
 };
 
-export { Api, requestUrl};
+export { Api, requestUrl };

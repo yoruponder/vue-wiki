@@ -16,7 +16,7 @@
               <option v-for="(v,k) in categoryArr" :key="k" :value="v.id">{{v.category_name}}</option>
             </select>
           </div>
-          <button class="button" @click="addTag">添加分類</button>          
+          <button class="button" @click="addNotic">添加分類</button>          
         </div>
         <div class="line">
           <div class="item-wp">
@@ -51,10 +51,27 @@
         </table>
       </div>
       <div class="fn-btn-area">
-        <button class="button button-orange" @click="delReply">刪除</button>
-        <button class="button" @click="delReply">移動</button>
+        <button class="button button-orange" @click="delNotic">刪除</button>
+        <button class="button" @click="moveNotic">移動</button>
       </div>
       <pagination :total="pageNum" :now="queryData.currentPage"/>
+      <popbox :slotArr="['moveCat','add']">
+        <div slot="moveCat" class="movecat-pop">
+          <div class="line">将通知移动至</div>
+          <div class="line">
+            <span>移至版塊:</span>
+            <select v-model="selMove">
+              <option value="">請選擇</option>
+              <option v-for="(v,k) in categoryArr" :key="k" :value="v.id">{{v.category_name}}</option>              
+            </select>
+          </div>
+        </div>
+        <div slot="add">
+          <p style="margin:30px 0 10px;font-size:16px;">添加分類：</p>
+          <input v-model="newCatName" type="text" placeholder="请输入新分類" autofocus="autofocus"/>
+        </div>
+      </popbox>
+      <shadow-component/>
     </div>
     <wiki-footer />
   </div>
@@ -90,9 +107,12 @@ export default {
         end_time: this.$route.query.et ? this.$route.query.et : ""
       },
       queryData: {
-        selcat: this.$route.query.cat ? this.$route.query.cat : '',
+        selcat: this.$route.params.cat ? this.$route.params.cat : '',
         currentPage: this.$route.query.page ? this.$route.query.page : 1
-      }
+      },
+
+      selMove: '',
+      newCatName: ''
     };
   },
   computed: {
@@ -101,6 +121,16 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      sdshow: "shadow/show",
+      sdhide: "shadow/hide",
+      pbshow: "popbox/show",
+      pbhide: "popbox/hide"
+    }),
+    closePopbox() {
+      this.pbhide();
+      this.sdhide();
+    },
     getCat() {
       Api.admin.notiCategory().then(res => {
         this.categoryArr = res.data.notiCategory;
@@ -119,7 +149,7 @@ export default {
     },
     setQuery() {
       this.queryData = {
-        selcat: this.$route.query.cat ? this.$route.query.cat : "",
+        selcat: this.$route.params.cat ? this.$route.params.cat : "",
         currentPage: this.$route.query.page ? this.$route.query.page : 1
       };
       this.inputDom = {
@@ -150,24 +180,59 @@ export default {
         this.count = res.data.count;
       });
     },
-    delReply() {
+    delNotic() {
       if (confirm("確認刪除嗎")) {
-        Api.admin.removeReply({ id: this.selIssues + "" }).then(res => {
+        Api.admin.removeNotice({ id: this.selIssues + "" }).then(res => {
           if (res.status == 1) {
             this.getListData();
+            this.selIssues = [];
           } else {
             alert("失敗");
           }
         });
       }
     },
-    addTag() {
+    moveNotic() {
+      if(this.selIssues.length){
+        this.sdshow({
+          fn: () => this.closePopbox()
+        });
+        this.pbshow({
+          type: 'slot',
+          tle: "添加標籤",
+          slotName: 'moveCat',
+          btn: [
+            {
+              txt: "確定",
+              type: "ok",
+              fn: () => this.doMoveNotic()
+            }
+          ]
+        });
+      }
+    },
+    doMoveNotic() {
+      let data = {
+        id: this.selIssues + '',
+        category_id: this.selMove
+      };
+      Api.admin.moveNotice(data).then(res => {
+        if(res.status == 1){
+          this.getListData();
+          this.closePopbox();
+          this.selIssues = [];
+        }else{
+          alert('失敗');
+        }
+      });
+    },
+    addNotic() {
       this.sdshow({
         fn: () => this.closePopbox()
       });
       this.pbshow({
         type: 'slot',
-        tle: "添加標籤",
+        tle: "添加分類",
         slotName: 'add',
         btn: [
           {
@@ -179,16 +244,15 @@ export default {
       });
     },
     doAdd() {
-      if(this.newTagName){
+      if(this.newCatName){
         let data = {
-          content: this.newTagName,
-          navigation_id: this.queryData.selnid
+          category_name: this.newCatName
         };
-        Api.admin.addTag(data).then(res => {
+        Api.admin.addNotice(data).then(res => {
           if(res.status == 1){
-            this.getListData();
+            this.getCat();
             this.closePopbox();
-            this.newTagName = '';
+            this.newCatName = '';
           }else{
             alert('失敗');
           }

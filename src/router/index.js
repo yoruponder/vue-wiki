@@ -142,7 +142,7 @@ export default new Router({
           })
         },
         {
-          path: 'notice',
+          path: 'notice/:cat?',
           component: () => ({
             component: import( /* webpackChunkName: "admin-not" */ '_PAGE_/admin/notice'),
           })

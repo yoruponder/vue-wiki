@@ -290,6 +290,7 @@ export default {
       if(confirm('確認刪除嗎')){
         Api.admin.removeTag({id: this.selIssues + ''}).then((res)=>{
           this.getListData();
+          this.selIssues = [];
         });
       }
     },
