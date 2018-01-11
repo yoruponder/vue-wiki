@@ -30,6 +30,13 @@ export default new Router({
       })
     },
     {
+      path: '/index/questionDetail/:qid',
+      name: 'questionDetail',
+      beforeEnter: (to, from, next) => {
+        next(`/question/${to.params.qid}`);
+      }
+    },
+    {
       path: '/question/:qid',
       name: 'questionDetail',
       component: () => ({
@@ -150,16 +157,20 @@ export default new Router({
         }
       ],
       beforeEnter: (to, from, next) => {
-        if(to.name == 'admin'){
-          next('/admin/score');
-        }else{
-          next();
+        // if(to.name == 'admin'){
+        //   next('/admin/score');
+        // }else{
+        //   next();
+        // }
+        if (!store.state.user.super) {
+          next('/');
+        } else {
+          if (to.name == 'admin') {
+            next('/admin/score');
+          } else {
+            next();
+          }
         }
-        //if (!store.state.user.super) {
-          //next('/');
-        //} else {
-          //next();
-        //}
       }
     },
   ]

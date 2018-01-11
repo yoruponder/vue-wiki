@@ -18,7 +18,7 @@
 
 <script>
 import wikiHead from "_COMP_/header";
-import lifeRecommend from "_COMP_/LifeRecommend";
+import lifeRecommend from "_COMP_/lifeRecommend";
 import lifeIdxList from "_COMP_/lifeIdxList";
 import rightBlock from "_COMP_/rightBlock";
 import wikiFooter from "_COMP_/footer";

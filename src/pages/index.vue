@@ -16,7 +16,7 @@
 <script>
 import wikiHead from "_COMP_/header";
 import topInfo from "_COMP_/topInfo";
-import hotPoint from "_COMP_/hotPoint";
+import hotPoint from "_COMP_/hotpoint";
 import rightBlock from "_COMP_/rightBlock";
 import wikiFooter from "_COMP_/footer";
 import questionCollection from "_COMP_/questionCollection";

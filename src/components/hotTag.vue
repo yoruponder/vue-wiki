@@ -22,7 +22,7 @@ export default {
     getTag(){
       Api.hotTag({c:'index',a:'hotTag',navigation_id:this.id}).then(res => {
         if(res.status){
-          this.data = res.data;
+          this.data = res.data || [];
         }
       });
     }

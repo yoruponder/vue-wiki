@@ -100,7 +100,7 @@
     <template v-for="(v,k) in child" v-if="k<2">
       <div class="cnt clearfix" :key="`b${k}`">
         <router-link class="cat-img" :to="`/life/collection/${v.pid}/${v.id}`">
-          <img :src="v.cover_img ? v.cover_img : `/static/img/timg.jpeg`" />
+          <img :src="v.cover_img ? v.cover_img : `/static/timg.jpeg`" />
           <p>{{v.category_name}}</p>
         </router-link>
         <ul>

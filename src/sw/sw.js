@@ -17,41 +17,41 @@ importScripts('./workbox-sw.prod.v2.1.2.js');
  * manifest which accounts for changes to local files and update the revision
  * accordingly.
  */
-const workboxSW = new self.WorkboxSW({
-    "skipWaiting": true,
-    "clientsClaim": true
-});
-function regCache(params) {
+// const workboxSW = new self.WorkboxSW({
+//     "skipWaiting": true,
+//     "clientsClaim": true
+// });
+// function regCache(params) {
     
-    const fileManifest = [
-        {
-            "url": "index.html",
-            "revision": "7dc612bd22a1710ad8c318480f474ea5"
-        },
-        {
-            "url": "index.js",
-            "revision": "125af70e751fba8f8d0de322e88b27f4"
-        }
-    ];
-    workboxSW.router.registerRoute(
-        new RegExp(/.+\.(png|jpg|jpeg|js|css)/),
-        workboxSW.strategies.cacheFirst()
-    );
-    // workboxSW.router.registerRoute(
-    //     new RegExp(/^https?:\/\/.+\.8591\.com\.tw\/static\/.+\.(png|jpg|jpeg|js|css|woff|svg|ttf|otf|eot|woff2)/),
-    //     workboxSW.strategies.cacheFirst()
-    // );
-    // workboxSW.router.registerRoute(
-    //     new RegExp('^http://localhost:5050/api'),
-    //     workboxSW.strategies.staleWhileRevalidate()
-    // );
+//     const fileManifest = [
+//         {
+//             "url": "index.html",
+//             "revision": "7dc612bd22a1710ad8c318480f474ea5"
+//         },
+//         {
+//             "url": "index.js",
+//             "revision": "125af70e751fba8f8d0de322e88b27f4"
+//         }
+//     ];
+//     workboxSW.router.registerRoute(
+//         new RegExp(/.+\.(png|jpg|jpeg|js|css)/),
+//         workboxSW.strategies.cacheFirst()
+//     );
+//     // workboxSW.router.registerRoute(
+//     //     new RegExp(/^https?:\/\/.+\.8591\.com\.tw\/static\/.+\.(png|jpg|jpeg|js|css|woff|svg|ttf|otf|eot|woff2)/),
+//     //     workboxSW.strategies.cacheFirst()
+//     // );
+//     // workboxSW.router.registerRoute(
+//     //     new RegExp('^http://localhost:5050/api'),
+//     //     workboxSW.strategies.staleWhileRevalidate()
+//     // );
 
-    workboxSW.precache([]);
+//     workboxSW.precache([]);
 
-}
-self.addEventListener('install', event => {
-    console.log('installing sw.js');
-    self.skipWaiting();
+// }
+// self.addEventListener('install', event => {
+//     console.log('installing sw.js');
+//     self.skipWaiting();
 
-    regCache();
-});
+//     regCache();
+// });

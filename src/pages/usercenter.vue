@@ -178,6 +178,7 @@ export default {
           this.pbshow({
             tle: "確定要上傳頭像",
             styleClass: "uc-upimg",
+            type:'html',
             cnt: `<div style="margin-top:20px;">${img}<span class="up-progress">等待上傳</span></div>`,
             btn: [
               {

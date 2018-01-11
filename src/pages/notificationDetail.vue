@@ -84,7 +84,7 @@
           </div>
           <div class="u-info">
             <div>
-              <img :src="data.user.photo ? data.user.photo : '/static/img/timg.jpeg'"/>
+              <img :src="data.user.photo ? data.user.photo : '/static/timg.jpeg'"/>
               <span>{{data.user.username}}</span>
             </div>
             <span>通知于：{{data.add_time}}</span>

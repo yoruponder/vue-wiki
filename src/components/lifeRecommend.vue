@@ -134,10 +134,10 @@
     <ul class="clearfix">
       <li v-for="(v,k) in rendData" :key="k">
         <router-link :to="`/question/${v.id}`">
-          <img class="cover" :src="v.cover_img ? v.cover_img : `/static/img/timg.jpeg`"/>
+          <img class="cover" :src="v.cover_img ? v.cover_img : `/static/timg.jpeg`"/>
           <h4>{{stringCut(v.issue_title,20)}}</h4>
         </router-link>
-        <img class="uico" :src="v.user.photo ? v.user.photo : `/static/img/timg.jpeg`" :title="v.user.username" />
+        <img class="uico" :src="v.user.photo ? v.user.photo : `/static/timg.jpeg`" :title="v.user.username" />
       </li>
     </ul>
   </div>

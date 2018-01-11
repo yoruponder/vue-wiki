@@ -49,7 +49,7 @@
             <tr v-else v-for="(v,k) in categorys" :key="k">
               <td><input type="checkbox" v-model="selIssues" :value="v.self.id"/></td>
               <td style="text-align:left;">{{v.self.category_name}}</td>
-              <td><strong style="color:#f00;">{{v.child.length || 0}}</strong></td>
+              <td><strong style="color:#f00;">{{v.child ? v.child.length : 0}}</strong></td>
               <td>
                 <button class="button" @click="editCat1(v.self.id,v.self.category_name)">
                   <span class="fa fa-edit"></span>編輯
@@ -112,7 +112,7 @@ import shadowComponent from "_COMP_/shadow";
 import { mapActions } from "vuex";
 
 export default {
-  name: "answer",
+  name: "category",
   components: {
     adminHead,
     wikiFooter,
@@ -156,10 +156,9 @@ export default {
       this.$router.push(`/admin/category/${this.queryData.selnid}`);
     },
     getSecondList() {
-      let arr = [];
       for (let v of this.categorys) {
         if (v.self.id == this.tmpCid) {
-          this.cat2List = v.child;
+          this.cat2List = v.child || [];
           break;
         }
       }
@@ -171,7 +170,9 @@ export default {
 
       Api.admin.category(data).then(res => {
         this.categorys = res.data;
-        this.getSecondList();
+        if(this.tmpCid){
+          this.getSecondList();
+        }
       });
     },
     navChange() {
@@ -350,6 +351,7 @@ export default {
     },
     goback() {
       this.isSecond = 0;
+      this.tmpCid = '';
     }
   },
   beforeMount: function() {

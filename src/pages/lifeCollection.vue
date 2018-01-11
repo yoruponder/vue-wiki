@@ -127,7 +127,7 @@
               </div>
               <div class="info">
                 <div>
-                  <img :src="v.user.photo ? v.user.photo : `/static/img/timg.jpeg`"/>
+                  <img :src="v.user.photo ? v.user.photo : `/static/timg.jpeg`"/>
                   <span>{{v.user.username}}</span>
                 </div>
                 <div>
